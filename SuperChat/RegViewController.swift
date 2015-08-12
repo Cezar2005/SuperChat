@@ -27,9 +27,7 @@ class RegViewController: UIViewController {
             for Field in arrayRegFiled {
                 if Field.text.isEmpty {
                     registrationIsAvalible = false
-                    Field.backgroundColor! = UIColor(red: 0.242, green: 0.206, blue: 0.237, alpha: 0.255)
-                    Field.textColor! = UIColor(red: 0.191, green: 0.021, blue: 0.154, alpha: 0.255)
-                    Field.layer.borderColor = UIColor(red: 0.191, green: 0.021, blue: 0.154, alpha: 0.255).CGColor
+                    Field.backgroundColor = UIColor.lightGrayColor()
                     println("Поле '\(Field.placeholder!)' пустое")
                 }
             }
@@ -40,18 +38,22 @@ class RegViewController: UIViewController {
             if PassRepeatField.text == PassField.text {
                 println("Можно регистрироваться!")
                 
-                Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":"Pupsik", "password":"qwerty3333"], encoding: .JSON)
-                    .response { request, response, data, error in
-                        //println(request)
-                        //println(response)
-                        //println(error)
+                Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":LoginField.text, "password":PassField.text], encoding: .JSON)
+                    .responseJSON { request, response, data, error in
+                        println("Request = \(request)")
+                        println("Response = \(response)")
+                        println("Error = \(error)")
+                        println("Data = \(data!)")
                 }
+            } else {
+                PassField.backgroundColor = UIColor.lightGrayColor()
+                PassRepeatField.backgroundColor = UIColor.lightGrayColor()
+                println("Введеные пароли не совпадают")
             }
         }
         
-        
     }
-    
+
 }
 
 

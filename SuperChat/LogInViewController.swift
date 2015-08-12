@@ -5,48 +5,43 @@ import SwiftyJSON
 
 class LogInViewController: UIViewController {
     
-    func testAlamofire() {
-
-        Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":"Pupsik", "password":"qwerty3333"], encoding: .JSON)
-            .response { request, response, data, error in
-                //println(request)
-                //println(response)
-                //println(error)
-        }
+    @IBOutlet weak var entryLoginField: UITextField!
+    @IBOutlet weak var entryPassField: UITextField!
+   
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true)
     }
     
-    func echoTest(){
-        var messageNum = 0
-        let ws = WebSocket(url: "wss://echo.websocket.org")
-        let send : ()->() = {
-            let msg = "\(++messageNum): \(NSDate().description)"
-            print("send: \(msg)")
-            ws.send(msg)
-        }
-        ws.event.open = {
-            print("opened")
-            send()
-        }
-        ws.event.close = { code, reason, clean in
-            print("close")
-        }
-        ws.event.error = { error in
-            print("error \(error)")
-        }
-        ws.event.message = { message in
-            if let text = message as? String {
-                print("recv: \(text)")
-                if messageNum == 10 {
-                    ws.close()
-                } else {
-                    send()
+    @IBAction func Login() {
+        
+        var arrayLoginFiled = [entryLoginField, entryPassField]
+        var loginIsAvalible = true
+        
+        entryLoginField.backgroundColor = UIColor.whiteColor()
+        entryPassField.backgroundColor = UIColor.whiteColor()
+        
+        //Проверка полей на заполненность и выделение незаполненных
+        if !arrayLoginFiled.isEmpty {
+            for Field in arrayLoginFiled {
+                if Field.text.isEmpty {
+                    loginIsAvalible = false
+                    Field.backgroundColor = UIColor.lightGrayColor()
+                    println("Поле '\(Field.placeholder!)' пустое")
                 }
             }
         }
-    }
-
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.view.endEditing(true)
+        
+        //Если логин возможен, то выполняем его
+        Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":entryLoginField.text, "password":entryPassField.text], encoding: .JSON)
+            .responseJSON { request, response, data, error in
+                println("Request = \(request)")
+                println("Response = \(response)")
+                println("Error = \(error)")
+                println("Data = \(data)")
+                
+        SwiftyJSON.
+        }
+        
     }
     
 }

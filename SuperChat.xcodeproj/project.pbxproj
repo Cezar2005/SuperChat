@@ -15,6 +15,7 @@
 		0AE9FA251B6AA98200BEE7A0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AE9FA231B6AA98200BEE7A0 /* LaunchScreen.xib */; };
 		0AE9FA311B6AA98300BEE7A0 /* SuperChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9FA301B6AA98300BEE7A0 /* SuperChatTests.swift */; };
 		0AE9FA3B1B6AA9DD00BEE7A0 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 0AE9FA3A1B6AA9DD00BEE7A0 /* Podfile */; };
+		0AF4B2AF1B7A93BE00083225 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4B2AE1B7A93BE00083225 /* ChatListViewController.swift */; };
 		D50CB1C3D16B518E17057C1B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0990FBECA8F1C3A701AFC4D4 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		0AE9FA2F1B6AA98300BEE7A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AE9FA301B6AA98300BEE7A0 /* SuperChatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperChatTests.swift; sourceTree = "<group>"; };
 		0AE9FA3A1B6AA9DD00BEE7A0 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0AF4B2AE1B7A93BE00083225 /* ChatListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		D3438693DC59386C3D4C6C3F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F033DFE27550CBCD2C5E196E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +93,7 @@
 			children = (
 				0AE9FA1C1B6AA98200BEE7A0 /* RegViewController.swift */,
 				0AD5858B1B6FF6EB00DA40F5 /* LogInViewController.swift */,
+				0AF4B2AE1B7A93BE00083225 /* ChatListViewController.swift */,
 				0AE9FA1E1B6AA98200BEE7A0 /* RegView.storyboard */,
 				0AE9FA181B6AA98200BEE7A0 /* Supporting Files */,
 			);
@@ -296,6 +299,7 @@
 			files = (
 				0AE9FA1D1B6AA98200BEE7A0 /* RegViewController.swift in Sources */,
 				0AE9FA1B1B6AA98200BEE7A0 /* AppDelegate.swift in Sources */,
+				0AF4B2AF1B7A93BE00083225 /* ChatListViewController.swift in Sources */,
 				0AD5858C1B6FF6EB00DA40F5 /* LogInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
