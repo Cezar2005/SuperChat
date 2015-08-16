@@ -2,12 +2,15 @@ import UIKit
 import Alamofire
 import SwiftWebSocket
 import SwiftyJSON
+import RealmSwift
 
 class RegViewController: UIViewController {
     
     @IBOutlet weak var LoginField: UITextField!
     @IBOutlet weak var PassField: UITextField!
     @IBOutlet weak var PassRepeatField: UITextField!
+    var session = currSession2()
+    let realm = Realm()
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
@@ -40,11 +43,23 @@ class RegViewController: UIViewController {
                 
                 Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":LoginField.text, "password":PassField.text], encoding: .JSON)
                     .responseJSON { request, response, data, error in
-                        println("Request = \(request)")
-                        println("Response = \(response)")
-                        println("Error = \(error)")
-                        println("Data = \(data!)")
-                }
+                        if(error != nil) {
+                            println("Error: \(error)")
+                            println("Request: \(request)")
+                            println("Response: \(response)")
+                        } else {
+                            //Сохраняем полученную сессию
+                            self.session.session_id = JSON(data!)["session_id"].stringValue
+                            //self.session.login = self.LoginField.text
+                            self.realm.write {
+                                self.realm.deleteAll()
+                                self.realm.add(self.session)
+                            }
+                            
+                            //Переходим в экран "Мои чаты"
+                            self.performSegueWithIdentifier("LoginToChatList", sender: self)
+                        }
+                    }
             } else {
                 PassField.backgroundColor = UIColor.lightGrayColor()
                 PassRepeatField.backgroundColor = UIColor.lightGrayColor()
@@ -53,7 +68,7 @@ class RegViewController: UIViewController {
         }
         
     }
-
+    
 }
 
 
