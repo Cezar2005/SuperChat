@@ -17,13 +17,17 @@ class LogInViewController: UIViewController {
     
     @IBAction func Login() {
         
-        var arrayLoginFiled = [entryLoginField, entryPassField]
-        var loginIsAvalible = true
-        
         entryLoginField.backgroundColor = UIColor.whiteColor()
         entryPassField.backgroundColor = UIColor.whiteColor()
         
+        var login: String = entryLoginField.text
+        var password: String = entryPassField.text
+        
+        var response = LoginService().perform(login, password: password)
+        
+        
         //Проверка полей на заполненность и выделение незаполненных
+        /*
         if !arrayLoginFiled.isEmpty {
             for Field in arrayLoginFiled {
                 if Field.text.isEmpty {
@@ -33,7 +37,32 @@ class LogInViewController: UIViewController {
                 }
             }
         }
+        */
         
+        if response["error"] == nil {
+            //Сохраняем полученную сессию
+            self.session.session_id = response["session_id"]!
+            //self.session.login = self.entryLoginField.text
+            self.realm.write {
+                self.realm.deleteAll()
+                self.realm.add(self.session)
+            }
+            
+            //Переходим в экран "Мои чаты"
+            self.performSegueWithIdentifier("LoginToChatList", sender: self)
+        } else {
+            switch response["error"]! {
+                case "data_is_empty":
+                    println("data_is_empty")
+                case "wrong_credentials":
+                    entryLoginField.backgroundColor = UIColor.lightGrayColor()
+                    entryPassField.backgroundColor = UIColor.lightGrayColor()
+                default:
+                    println(response["error"]!)
+            }
+        }
+        
+        /*
         //Если логин возможен, то выполняем его
         Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":entryLoginField.text, "password":entryPassField.text], encoding: .JSON)
             .responseJSON { request, response, data, error in
@@ -63,6 +92,7 @@ class LogInViewController: UIViewController {
                     }
                 }
             }
+        */
     }
     
 }

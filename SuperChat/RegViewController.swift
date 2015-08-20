@@ -18,12 +18,44 @@ class RegViewController: UIViewController {
     
     @IBAction func Registration() {
         
-        var arrayRegFiled = [LoginField, PassField, PassRepeatField]
-        var registrationIsAvalible = true
-        
         LoginField.backgroundColor = UIColor.whiteColor()
         PassField.backgroundColor = UIColor.whiteColor()
         PassRepeatField.backgroundColor = UIColor.whiteColor()
+        
+        var login: String = LoginField.text
+        var password: String = PassField.text
+        var passwordRepeat: String = PassRepeatField.text
+        
+        var response = RegService().perform(login, password: password, passwordRepeat: passwordRepeat)
+        
+        if response["error"] == nil {
+            //Сохраняем полученную сессию
+            self.session.session_id = response["session_id"]!
+            //self.session.login = self.LoginField.text
+            self.realm.write {
+                self.realm.deleteAll()
+                self.realm.add(self.session)
+            }
+            
+            //Переходим в экран "Мои чаты"
+            self.performSegueWithIdentifier("RegToChatList", sender: self)
+        } else {
+            switch response["error"]! {
+            case "data_is_empty":
+                println("data_is_empty")
+            case "wrong_credentials":
+                LoginField.backgroundColor = UIColor.lightGrayColor()
+                PassField.backgroundColor = UIColor.lightGrayColor()
+                PassRepeatField.backgroundColor = UIColor.lightGrayColor()
+            default:
+                println(response["error"]!)
+                
+                
+            }
+        }
+        
+        
+        /*
         
         //Проверка полей на заполненность и выделение незаполненных
         if !arrayRegFiled.isEmpty {
@@ -66,6 +98,7 @@ class RegViewController: UIViewController {
                 println("Введеные пароли не совпадают")
             }
         }
+        */
         
     }
     
