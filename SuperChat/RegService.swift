@@ -29,8 +29,8 @@ class RegService {
     private func make_request(login: String, password: String) -> [String: String] {
         var result: [String: String] = [:]
         
-        Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":login, "password":password], encoding: .JSON)
-            .responseJSON { request, response, data, error in
+        Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
+            { request, response, data, error in
                 if(error != nil) {
                     println("Error: \(error)")
                     println("Request: \(request)")
@@ -49,9 +49,8 @@ class RegService {
                         println("Параметр data в ответе на запрос пуст")
                     }
                 }
-        }
+            }
         return result
-    
     }
     
     private func process_error() -> [String: String]  {

@@ -14,7 +14,7 @@ class LoginService {
         }
         
         if loginIsAvalible {
-            response = make_request(login, password: password)
+            make_request(login, password: password, completion_request: { (result) in response = result } )
         } else {
             response = process_error()
         }
@@ -23,14 +23,12 @@ class LoginService {
 
     }
     
-    private func make_request(login: String, password: String) -> [String: String]  {
+    private func make_request(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> Void  {
         
         var result: [String: String] = [:]
         
-        
-        //Если логин возможен, то выполняем его
-        Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":login, "password":password], encoding: .JSON)
-        .responseJSON { request, response, data, error in
+        Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
+            { request, response, data, error in
                 if(error != nil) {
                     println("Error: \(error)")
                     println("Request: \(request)")
@@ -49,9 +47,8 @@ class LoginService {
                         println("Параметр data в ответе на запрос пуст")
                     }
                 }
-        }
-        return result
-        
+                completion_request(result: result)
+            }
     }
     
     private func process_error() -> [String: String]  {
