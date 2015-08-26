@@ -40,9 +40,8 @@ class LogInViewController: UIViewController {
         */
         
         if response["error"] == nil {
-            //Сохраняем полученную сессию
-            self.session.session_id = response["session_id"]!
-            //self.session.login = self.entryLoginField.text
+            //self.session.session_id = response["session_id"]!
+            self.session.session_id = "2e2a55e1-3967-4e75-bfb1-7151b823ca6f"
             self.realm.write {
                 self.realm.deleteAll()
                 self.realm.add(self.session)

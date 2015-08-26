@@ -12,47 +12,11 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         
-        //получим из Mobile Database текущую сессию
-        let curSession = Realm().objects(currSession2)[0]
-        //создадим заголовок для .GET запросов
-        let headers = [
-            "X-Session-Id": "\(curSession.session_id)",
-            "Accept": "application/json",
-            "Content-type": "application/json"
-        ]
-        
         //Узнаем кем является текущий залогиненный юзер
-        Alamofire.request(.GET, "http://localhost:8081/v1/info", headers: headers)
-            .responseJSON { requestInfo, responseInfo, dataInfo, errorInfo in
-                if(errorInfo != nil) {
-                    println("Error: \(errorInfo)")
-                    println("Request: \(requestInfo)")
-                    println("Response: \(responseInfo)")
-                } else {
-                    println("Error: \(errorInfo)")
-                    println("Request: \(requestInfo)")
-                    println("Response: \(responseInfo)")
-                    println("Data: \(dataInfo!)")
-                    self.jsonDataInfo = JSON(dataInfo!)
-                }
-        }
-    
-    
+        var currUser = InfoUserService().infoAboutUser()
+        
         //Получим все комнаты, доступные текущему юзеру
-        Alamofire.request(.GET, "http://localhost:8081/v1/rooms", headers: headers, encoding: .JSON)
-            .responseJSON { requestRooms, responseRooms, dataRooms, errorRooms in
-                if(errorRooms != nil) {
-                    println("Error: \(errorRooms)")
-                    println("Request: \(requestRooms)")
-                    println("Response: \(responseRooms)")
-                } else {
-                    println("Error: \(errorRooms)")
-                    println("Request: \(requestRooms)")
-                    println("Response: \(responseRooms)")
-                    println("Data: \(dataRooms!)")
-                    self.jsonDataRooms = JSON(dataRooms!)
-                }
-        }
+        var availableUserRooms = ChatRoomsService().availableRooms()
         
         //Ищем в комнатах других юзеров, не являющихся текущим. Таким образом словарь "список контактов". Если ничего не находим, оборажаем информацию о необходимости поиска юзера для общения.
         if jsonDataRooms.isEmpty && jsonDataInfo.isEmpty {

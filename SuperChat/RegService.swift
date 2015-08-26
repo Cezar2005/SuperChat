@@ -39,9 +39,9 @@ class RegService {
                     var jsonData = JSON(data!)
                     if !jsonData.isEmpty {
                         if !jsonData["session_id"].isEmpty {
-                            result["session_id"] = JSON(data!)["session_id"].stringValue
+                            result["session_id"] = jsonData["session_id"].stringValue
                         } else {
-                            result["error"] = JSON(data!)["error"]["code"].stringValue
+                            result["error"] = jsonData["error"]["code"].stringValue
                             println("Параметр session_id пуст")
                         }
                     } else {
