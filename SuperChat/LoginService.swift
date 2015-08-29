@@ -8,7 +8,7 @@ class LoginService {
     let ServerPath: String = ClientAPI().ServerPath
     
     //Public functions
-    func perform(login: String, password: String) -> [String: String] {
+    func perform(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var loginIsAvalible = true
         var response: [String: String] = [:]
         
@@ -17,7 +17,7 @@ class LoginService {
         }
         
         if loginIsAvalible {
-            make_request(login, password: password, completion_request: { (result) in response = result } )
+            make_request(login, password: password, completion_request: completion_request )
         } else {
             response = process_error()
         }
