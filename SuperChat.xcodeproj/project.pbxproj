@@ -14,6 +14,7 @@
 		0AD5858C1B6FF6EB00DA40F5 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5858B1B6FF6EB00DA40F5 /* LogInViewController.swift */; };
 		0ADEA6E81B8D044E00B9E136 /* ChatRoomsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADEA6E71B8D044E00B9E136 /* ChatRoomsService.swift */; };
 		0ADFD0BB1B8E5E5400A3DA56 /* InfoUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADFD0BA1B8E5E5400A3DA56 /* InfoUserService.swift */; };
+		0AE13FF91B8FBA370022E0FB /* ClientAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE13FF81B8FBA370022E0FB /* ClientAPI.swift */; };
 		0AE438991B866F6D0081E548 /* RegService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE438981B866F6D0081E548 /* RegService.swift */; };
 		0AE9FA1B1B6AA98200BEE7A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9FA1A1B6AA98200BEE7A0 /* AppDelegate.swift */; };
 		0AE9FA1D1B6AA98200BEE7A0 /* RegViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9FA1C1B6AA98200BEE7A0 /* RegViewController.swift */; };
@@ -45,6 +46,7 @@
 		0AD5858B1B6FF6EB00DA40F5 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		0ADEA6E71B8D044E00B9E136 /* ChatRoomsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatRoomsService.swift; sourceTree = "<group>"; };
 		0ADFD0BA1B8E5E5400A3DA56 /* InfoUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoUserService.swift; sourceTree = "<group>"; };
+		0AE13FF81B8FBA370022E0FB /* ClientAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientAPI.swift; sourceTree = "<group>"; };
 		0AE438981B866F6D0081E548 /* RegService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegService.swift; sourceTree = "<group>"; };
 		0AE9FA151B6AA98200BEE7A0 /* SuperChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AE9FA191B6AA98200BEE7A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				0AE438981B866F6D0081E548 /* RegService.swift */,
 				0ADEA6E71B8D044E00B9E136 /* ChatRoomsService.swift */,
 				0ADFD0BA1B8E5E5400A3DA56 /* InfoUserService.swift */,
+				0AE13FF81B8FBA370022E0FB /* ClientAPI.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				0A382D231B7BE4A7004DE23F /* SearchViewController.swift in Sources */,
 				0AE9FA1D1B6AA98200BEE7A0 /* RegViewController.swift in Sources */,
 				0AE9FA1B1B6AA98200BEE7A0 /* AppDelegate.swift in Sources */,
+				0AE13FF91B8FBA370022E0FB /* ClientAPI.swift in Sources */,
 				0ADFD0BB1B8E5E5400A3DA56 /* InfoUserService.swift in Sources */,
 				0AF4B2AF1B7A93BE00083225 /* MyChatViewController.swift in Sources */,
 				0ABF5E261B7F71D400D99909 /* mobileDataBase.swift in Sources */,

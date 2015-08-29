@@ -5,8 +5,20 @@ import RealmSwift
 
 class ChatRoomsService {
     
+    let ServerPath: String = ClientAPI().ServerPath
     let curSession: String = Realm().objects(currSession2)[0].session_id
     let headers: [String: String]
+
+    struct User {
+            var id: Int = 0
+            var login: String = ""
+        }
+        
+        
+    struct Room {
+            var id: Int = 0
+            var users: [User] = []
+        }
     
     init () {
         self.headers = [
@@ -16,28 +28,13 @@ class ChatRoomsService {
         ]
     }
     
-    func availableRooms() -> [String: AnyClass] {
-        var result: [String: AnyClass] = [:]
+    func availableRooms() -> [Room] {
         
+        var response: [Room] = []
         
-        /*
-        Alamofire.request(.GET, "http://localhost:8081/v1/rooms", headers: headers, encoding: .JSON)
-        .responseJSON { requestRooms, responseRooms, dataRooms, errorRooms in
-        if(errorRooms != nil) {
-        println("Error: \(errorRooms)")
-        println("Request: \(requestRooms)")
-        println("Response: \(responseRooms)")
-        } else {
-        println("Error: \(errorRooms)")
-        println("Request: \(requestRooms)")
-        println("Response: \(responseRooms)")
-        println("Data: \(dataRooms!)")
-        self.jsonDataRooms = JSON(dataRooms!)
-        }
-        }
-        */
+        make_request_availableRooms( { (result: [Room]) -> Void in response = result } )
         
-        return result
+        return response
     }
     
     func createRoom(users: [Int: [String: String]]) -> [String: AnyClass] {
@@ -53,6 +50,39 @@ class ChatRoomsService {
     func historyRoom(id_room: String) -> [[String:String]] {
         var result = [[String:String]]()
         return result
+    }
+    
+    private func make_request_availableRooms(completion_request: (result: [Room]) -> Void) -> Void {
+        
+        var result: [Room] = []
+        
+        Alamofire.request(.GET, "\(ServerPath)/v1/rooms", headers: headers, encoding: .JSON)
+            .responseJSON { request, response, data, error in
+                if(error != nil) {
+                    println("Error: \(error)")
+                    println("Request: \(request)")
+                    println("Response: \(response)")
+                } else {
+                    var jsonData = JSON(data!)
+                    if !jsonData.isEmpty {
+                        for (id_room, users) in jsonData {
+                            var room: Room = Room()
+                            room.id = jsonData[id_room].intValue
+                            for (user_id, user_login) in users {
+                                var user: User = User()
+                                user.id = users["id"].intValue
+                                user.login = users["login"].stringValue
+                                room.users.append(user)
+                            }
+                        result.append(room)
+                        }
+                        
+                    } else {
+                        println("data_is_empty")
+                    }
+                }
+                completion_request(result: result)
+            }
     }
     
 }

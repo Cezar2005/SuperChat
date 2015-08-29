@@ -5,6 +5,7 @@ import RealmSwift
 
 class InfoUserService {
     
+    let ServerPath: String = ClientAPI().ServerPath
     let curSession: String = Realm().objects(currSession2)[0].session_id
     let headers: [String: String]
     
@@ -38,7 +39,7 @@ class InfoUserService {
         
         var result: [String: String] = [:]
         
-        Alamofire.request(.GET, "http://localhost:8081/v1/info", headers: headers).responseJSON
+        Alamofire.request(.GET, "\(ServerPath)/v1/info", headers: headers).responseJSON
         { request, response, data, error in
             if(error != nil) {
                 println("Error: \(error)")

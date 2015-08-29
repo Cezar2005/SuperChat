@@ -4,6 +4,8 @@ import SwiftyJSON
 
 class RegService {
     
+    let ServerPath: String = ClientAPI().ServerPath
+    
     func perform(login: String, password: String, passwordRepeat: String) -> [String: String] {
         var regIsAvalible = true
         var response: [String: String] = [:]
@@ -29,7 +31,7 @@ class RegService {
     private func make_request(login: String, password: String) -> [String: String] {
         var result: [String: String] = [:]
         
-        Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
+        Alamofire.request(.POST, "\(ServerPath)/v1/register", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
             { request, response, data, error in
                 if(error != nil) {
                     println("Error: \(error)")

@@ -4,11 +4,12 @@ import SwiftyJSON
 
 class LoginService {
     
+    let ServerPath: String = ClientAPI().ServerPath
+    
     func perform(login: String, password: String) -> [String: String] {
         var loginIsAvalible = true
         var response: [String: String] = [:]
         
-        //Проверка полей на заполненность
         if login.isEmpty || password.isEmpty {
             loginIsAvalible = false
         }
@@ -27,7 +28,7 @@ class LoginService {
         
         var result: [String: String] = [:]
         
-        Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
+        Alamofire.request(.POST, "\(ServerPath)/v1/login", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
             { request, response, data, error in
                 if(error != nil) {
                     println("Error: \(error)")
