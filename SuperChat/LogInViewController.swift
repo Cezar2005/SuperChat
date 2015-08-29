@@ -15,18 +15,10 @@ class LogInViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    @IBAction func Login() {
-        
-        entryLoginField.backgroundColor = UIColor.whiteColor()
-        entryPassField.backgroundColor = UIColor.whiteColor()
-        
-        var login: String = entryLoginField.text
-        var password: String = entryPassField.text
-        
-        var response = LoginService().perform(login, password: password)
-        
+    func process(response : [String: String]) -> Void {
         if response["error"] == nil {
-            self.session.session_id = response["session_id"]!
+            self.session.session_id = "2e2a55e1-3967-4e75-bfb1-7151b823ca6f"
+            //self.session.session_id = response["session_id"]!
             //Запишем сессию в локальную БД
             self.realm.write {
                 self.realm.deleteAll()
@@ -46,6 +38,19 @@ class LogInViewController: UIViewController {
                 println(response["error"]!)
             }
         }
+    }
+    
+    @IBAction func Login() {
+        
+        entryLoginField.backgroundColor = UIColor.whiteColor()
+        entryPassField.backgroundColor = UIColor.whiteColor()
+        
+        var login: String = entryLoginField.text
+        var password: String = entryPassField.text
+        
+        var response = LoginService().perform(login, password: password, completion_request: process)
+        
+
         
         /*
         //Если логин возможен, то выполняем его
