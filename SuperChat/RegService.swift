@@ -4,8 +4,10 @@ import SwiftyJSON
 
 class RegService {
     
+    //Properties
     let ServerPath: String = ClientAPI().ServerPath
     
+    //Public functions
     func perform(login: String, password: String, passwordRepeat: String) -> [String: String] {
         var regIsAvalible = true
         var response: [String: String] = [:]
@@ -28,6 +30,7 @@ class RegService {
         
     }
     
+    //Private functions. Provides performance of public functions.
     private func make_request(login: String, password: String) -> [String: String] {
         var result: [String: String] = [:]
         
@@ -51,13 +54,12 @@ class RegService {
                         println("Параметр data в ответе на запрос пуст")
                     }
                 }
-            }
+        }
         return result
     }
     
     private func process_error() -> [String: String]  {
         return ["error": "wrong_credentials"]
     }
-    
     
 }

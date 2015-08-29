@@ -4,8 +4,10 @@ import SwiftyJSON
 
 class LoginService {
     
+    //Properties
     let ServerPath: String = ClientAPI().ServerPath
     
+    //Public functions
     func perform(login: String, password: String) -> [String: String] {
         var loginIsAvalible = true
         var response: [String: String] = [:]
@@ -21,9 +23,10 @@ class LoginService {
         }
         
         return response
-
+        
     }
     
+    //Private functions. Provides performance of public functions.
     private func make_request(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> Void  {
         
         var result: [String: String] = [:]
@@ -49,7 +52,7 @@ class LoginService {
                     }
                 }
                 completion_request(result: result)
-            }
+        }
     }
     
     private func process_error() -> [String: String]  {

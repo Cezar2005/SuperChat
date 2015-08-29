@@ -5,21 +5,20 @@ import RealmSwift
 
 class ChatRoomsService {
     
+    //Properties
     let ServerPath: String = ClientAPI().ServerPath
     let curSession: String = Realm().objects(currSession2)[0].session_id
     let headers: [String: String]
-
     struct User {
-            var id: Int = 0
-            var login: String = ""
-        }
-        
-        
+        var id: Int = 0
+        var login: String = ""
+    }
     struct Room {
-            var id: Int = 0
-            var users: [User] = []
-        }
+        var id: Int = 0
+        var users: [User] = []
+    }
     
+    //Init function
     init () {
         self.headers = [
             "X-Session-Id": "\(curSession)",
@@ -28,6 +27,7 @@ class ChatRoomsService {
         ]
     }
     
+    //Public functions
     func availableRooms() -> [Room] {
         
         var response: [Room] = []
@@ -52,6 +52,7 @@ class ChatRoomsService {
         return result
     }
     
+    //Private functions. Provides performance of public functions.
     private func make_request_availableRooms(completion_request: (result: [Room]) -> Void) -> Void {
         
         var result: [Room] = []
@@ -74,7 +75,7 @@ class ChatRoomsService {
                                 user.login = users["login"].stringValue
                                 room.users.append(user)
                             }
-                        result.append(room)
+                            result.append(room)
                         }
                         
                     } else {
@@ -82,7 +83,7 @@ class ChatRoomsService {
                     }
                 }
                 completion_request(result: result)
-            }
+        }
     }
     
 }
