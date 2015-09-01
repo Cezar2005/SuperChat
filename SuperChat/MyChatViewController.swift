@@ -12,11 +12,10 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         
         //текущий юзер
-        self.currUser = InfoUserService().infoAboutUser()
+        InfoUserService().infoAboutUser( {(result: [String: String]) -> Void in self.currUser = result} )
         //доступные комнаты текущего юзера
-        self.availableUserRooms = ChatRoomsService().availableRooms()
-        //контакты для отображения на экране
-        
+        ChatRoomsService().availableRooms( {(result: [ChatRoomsService.Room]) -> Void in
+            self.availableUserRooms = result} )
     }
     
     //Функция возвращает количество строк, которое надо выводить в таблице

@@ -8,7 +8,7 @@ class RegService {
     let ServerPath: String = ClientAPI().ServerPath
     
     //Public functions
-    func perform(login: String, password: String, passwordRepeat: String) -> [String: String] {
+    func perform(login: String, password: String, passwordRepeat: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var regIsAvalible = true
         var response: [String: String] = [:]
         
@@ -21,7 +21,7 @@ class RegService {
         }
         
         if regIsAvalible {
-            response = make_request(login, password: password)
+            make_request(login, password: password, completion_request: completion_request)
         } else {
             response = process_error()
         }
@@ -31,7 +31,7 @@ class RegService {
     }
     
     //Private functions. Provides performance of public functions.
-    private func make_request(login: String, password: String) -> [String: String] {
+    private func make_request(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> Void {
         var result: [String: String] = [:]
         
         Alamofire.request(.POST, "\(ServerPath)/v1/register", parameters: ["login":login, "password":password], encoding: .JSON).responseJSON
@@ -54,8 +54,8 @@ class RegService {
                         println("Параметр data в ответе на запрос пуст")
                     }
                 }
+                completion_request(result: result)
         }
-        return result
     }
     
     private func process_error() -> [String: String]  {

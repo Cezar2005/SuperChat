@@ -15,15 +15,7 @@ class LogInViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    @IBAction func Login() {
-        
-        entryLoginField.backgroundColor = UIColor.whiteColor()
-        entryPassField.backgroundColor = UIColor.whiteColor()
-        
-        var login: String = entryLoginField.text
-        var password: String = entryPassField.text
-        
-        var response = LoginService().perform(login, password: password)
+    func getResultOperation(response: [String: String]) -> Void {
         
         if response["error"] == nil {
             self.session.session_id = response["session_id"]!
@@ -46,38 +38,18 @@ class LogInViewController: UIViewController {
                 println(response["error"]!)
             }
         }
+    }
+    
+    @IBAction func Login() {
         
-        /*
-        //Если логин возможен, то выполняем его
-        Alamofire.request(.POST, "http://localhost:8081/v1/login", parameters: ["login":entryLoginField.text, "password":entryPassField.text], encoding: .JSON)
-        .responseJSON { request, response, data, error in
-        if(error != nil) {
-        println("Error: \(error)")
-        println("Request: \(request)")
-        println("Response: \(response)")
-        } else {
-        var jsonData = JSON(data!)
-        if !jsonData.isEmpty {
-        if !jsonData["session_id"].isEmpty {
-        //Сохраняем полученную сессию
-        self.session.session_id = JSON(data!)["session_id"].stringValue
-        //self.session.login = self.entryLoginField.text
-        self.realm.write {
-        self.realm.deleteAll()
-        self.realm.add(self.session)
-        }
+        entryLoginField.backgroundColor = UIColor.whiteColor()
+        entryPassField.backgroundColor = UIColor.whiteColor()
         
-        //Переходим в экран "Мои чаты"
-        self.performSegueWithIdentifier("LoginToChatList", sender: self)
-        } else {
-        println("Параметр session_id пуст")
-        }
-        } else {
-        println("Параметр data в ответе на запрос пуст")
-        }
-        }
-        }
-        */
+        var login: String = entryLoginField.text
+        var password: String = entryPassField.text
+        
+        LoginService().perform(login, password: password, completion_request: getResultOperation)
+        
     }
     
 }

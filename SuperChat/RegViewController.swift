@@ -16,21 +16,11 @@ class RegViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    @IBAction func Registration() {
-        
-        LoginField.backgroundColor = UIColor.whiteColor()
-        PassField.backgroundColor = UIColor.whiteColor()
-        PassRepeatField.backgroundColor = UIColor.whiteColor()
-        
-        var login: String = LoginField.text
-        var password: String = PassField.text
-        var passwordRepeat: String = PassRepeatField.text
-        
-        var response = RegService().perform(login, password: password, passwordRepeat: passwordRepeat)
-        
+    func getResultOperation(response: [String: String]) -> Void {
         if response["error"] == nil {
-            //self.session.session_id = response["session_id"]!
-            self.session.session_id = "2e2a55e1-3967-4e75-bfb1-7151b823ca6f"
+            self.session.session_id = response["session_id"]!
+            //self.session.session_id = "2e2a55e1-3967-4e75-bfb1-7151b823ca6f"
+            //Запишем сессию в локальную БД
             self.realm.write {
                 self.realm.deleteAll()
                 self.realm.add(self.session)
@@ -48,56 +38,21 @@ class RegViewController: UIViewController {
                 PassRepeatField.backgroundColor = UIColor.lightGrayColor()
             default:
                 println(response["error"]!)
-                
-                
             }
         }
+    }
+    
+    @IBAction func Registration() {
         
+        LoginField.backgroundColor = UIColor.whiteColor()
+        PassField.backgroundColor = UIColor.whiteColor()
+        PassRepeatField.backgroundColor = UIColor.whiteColor()
         
-        /*
+        var login: String = LoginField.text
+        var password: String = PassField.text
+        var passwordRepeat: String = PassRepeatField.text
         
-        //Проверка полей на заполненность и выделение незаполненных
-        if !arrayRegFiled.isEmpty {
-            for Field in arrayRegFiled {
-                if Field.text.isEmpty {
-                    registrationIsAvalible = false
-                    Field.backgroundColor = UIColor.lightGrayColor()
-                    println("Поле '\(Field.placeholder!)' пустое")
-                }
-            }
-        }
-        
-        //Если регистрация возможна, то проверяем совпадение двух паролей
-        if registrationIsAvalible {
-            if PassRepeatField.text == PassField.text {
-                println("Можно регистрироваться!")
-                
-                Alamofire.request(.POST, "http://localhost:8081/v1/register", parameters: ["login":LoginField.text, "password":PassField.text], encoding: .JSON)
-                    .responseJSON { request, response, data, error in
-                        if(error != nil) {
-                            println("Error: \(error)")
-                            println("Request: \(request)")
-                            println("Response: \(response)")
-                        } else {
-                            //Сохраняем полученную сессию
-                            self.session.session_id = JSON(data!)["session_id"].stringValue
-                            //self.session.login = self.LoginField.text
-                            self.realm.write {
-                                self.realm.deleteAll()
-                                self.realm.add(self.session)
-                            }
-                            
-                            //Переходим в экран "Мои чаты"
-                            self.performSegueWithIdentifier("LoginToChatList", sender: self)
-                        }
-                    }
-            } else {
-                PassField.backgroundColor = UIColor.lightGrayColor()
-                PassRepeatField.backgroundColor = UIColor.lightGrayColor()
-                println("Введеные пароли не совпадают")
-            }
-        }
-        */
+        RegService().perform(login, password: password, passwordRepeat: passwordRepeat, completion_request: getResultOperation)
         
     }
     

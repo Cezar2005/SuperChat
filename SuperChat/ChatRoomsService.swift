@@ -28,11 +28,11 @@ class ChatRoomsService {
     }
     
     //Public functions
-    func availableRooms() -> [Room] {
+    func availableRooms(completion_request: (resilt: [Room]) -> Void) -> [Room] {
         
         var response: [Room] = []
         
-        make_request_availableRooms( { (result: [Room]) -> Void in response = result } )
+        make_request_availableRooms(completion_request)
         
         return response
     }

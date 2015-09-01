@@ -20,11 +20,11 @@ class InfoUserService {
     }
     
     //Public functions
-    func infoAboutUser() -> [String: String] {
+    func infoAboutUser(completion_request: (resilt: [String: String]) -> Void) -> [String: String] {
         var response: [String: String] = [:]
         
         if !curSession.isEmpty {
-            make_request_infoAboutUser({ (result) in response = result })
+            make_request_infoAboutUser(completion_request)
         } else {
             response = process_error()
         }
@@ -33,8 +33,12 @@ class InfoUserService {
         
     }
     
-    func searchUsers(searchReq: String) -> [String: String] {
-        var response: [String: String] = [:]
+    func searchUsers(searchString: String, completion_request: (result: [ChatRoomsService.User]) -> Void) -> [ChatRoomsService.User] {
+        
+        var response: [ChatRoomsService.User] = []
+        
+        make_request_searchUsers(searchString, completion_request: completion_request)
+        
         return response
     }
     
@@ -62,6 +66,33 @@ class InfoUserService {
                     } else {
                         result["error"] = "data_is_empty"
                         println("Параметр data в ответе на запрос пуст")
+                    }
+                }
+                completion_request(result: result)
+        }
+        
+    }
+    
+    private func make_request_searchUsers(searchString: String, completion_request: (result: [ChatRoomsService.User]) -> Void) -> Void {
+        var result: [ChatRoomsService.User] = []
+        
+        Alamofire.request(.GET, "\(ServerPath)/v1/users/?q=\(searchString)", headers: headers, encoding: .JSON)
+            .responseJSON { request, response, data, error in
+                if(error != nil) {
+                    println("Error: \(error)")
+                    println("Request: \(request)")
+                    println("Response: \(response)")
+                } else {
+                    var jsonData = JSON(data!)
+                    if !jsonData.isEmpty {
+                        for i in 0...jsonData.count-1 {
+                            var user: ChatRoomsService.User = ChatRoomsService.User()
+                            user.id = jsonData[i]["id"].intValue
+                            user.login = jsonData[i]["login"].stringValue
+                            result.append(user)
+                        }
+                    } else {
+                        println("data_is_empty")
                     }
                 }
                 completion_request(result: result)
