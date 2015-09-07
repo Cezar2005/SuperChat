@@ -3,7 +3,7 @@ import Alamofire
 import SwiftWebSocket
 import SwiftyJSON
 
-class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate {
+class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate, UIAlertViewDelegate {
     
     var searchResult: [ChatRoomsService.User] = []
     
@@ -45,6 +45,31 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
                 self.view.endEditing(true)
             }
         )
+    }
+    
+    //Обработка выбора строки
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        var alertQuestion = UIAlertView()
+        alertQuestion.title = "Чат"
+        alertQuestion.message = "Создать чат с \(searchResult[indexPath.row].login)?"
+        alertQuestion.addButtonWithTitle("Отмена")
+        alertQuestion.addButtonWithTitle("OK")
+        alertQuestion.show()
+        
+    }
+    
+    //Обработка нажатия кнопок на алерте
+    func alertView(alertView:UIAlertView, clickedButtonAtIndex buttonIndex:Int){
+        
+        //Если нажата кнопка "ОК" (индекс 1)
+        if buttonIndex == 1 {
+            // обработка нажатия кнопки ок
+
+        } else {
+            alertView.hidden = true
+        }
+        
     }
     
     //Функция возвращает количество строк, которое надо выводить в таблице

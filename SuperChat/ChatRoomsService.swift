@@ -37,9 +37,13 @@ class ChatRoomsService {
         return response
     }
     
-    func createRoom(users: [Int: [String: String]]) -> [String: AnyClass] {
-        var result: [String: AnyClass] = [:]
-        return result
+    func createRoom(users: [User], completion_request: (result: Room) -> Void) -> Room {
+        
+        var response: Room = Room()
+        
+        make_request_createRoom(users, completion_request: completion_request)
+        
+        return response
     }
     
     func infoAboutRoom(id_room: String) -> [String: AnyClass] {
@@ -85,5 +89,42 @@ class ChatRoomsService {
                 completion_request(result: result)
         }
     }
+    
+    private func make_request_createRoom(users: [User], completion_request: (result: Room) -> Void) -> Void {
+        
+        var result: Room = Room()
+        let parameters = [
+            "users": [["id": users[0].id, "login": users[0].login]]
+            //"users": users
+        ]
+        
+        Alamofire.request(.POST, "\(ServerPath)/v1/rooms", parameters: parameters, headers: headers, encoding: .JSON)
+            .responseJSON { request, response, data, error in
+                if(error != nil) {
+                    println("Error: \(error)")
+                    println("Request: \(request)")
+                    println("Response: \(response)")
+                } else {
+                    var jsonData = JSON(data!)
+                    if !jsonData.isEmpty {
+                        for (id_room, users) in jsonData {
+                            result.id = jsonData[id_room].intValue
+                            for (user_id, user_login) in users {
+                                var user: User = User()
+                                user.id = users["id"].intValue
+                                user.login = users["login"].stringValue
+                                result.users.append(user)
+                            }
+                        }
+                        
+                    } else {
+                        println("data_is_empty")
+                    }
+                }
+                completion_request(result: result)
+        }
+        
+    }
+    
     
 }
