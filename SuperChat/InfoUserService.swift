@@ -56,7 +56,7 @@ class InfoUserService {
                 } else {
                     var jsonData = JSON(data!)
                     if !jsonData.isEmpty {
-                        if !(jsonData["id"].isEmpty || !jsonData["login"].isEmpty) {
+                        if !(jsonData["id"].stringValue.isEmpty || jsonData["login"].stringValue.isEmpty) {
                             result["id"] = jsonData["id"].stringValue
                             result["login"] = jsonData["login"].stringValue
                         } else {

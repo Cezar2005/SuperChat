@@ -70,18 +70,19 @@ class ChatRoomsService {
                 } else {
                     var jsonData = JSON(data!)
                     if !jsonData.isEmpty {
-                        for (id_room, users) in jsonData {
+                        for i in 0...jsonData.count-1 {
                             var room: Room = Room()
-                            room.id = jsonData[id_room].intValue
-                            for (user_id, user_login) in users {
-                                var user: User = User()
-                                user.id = users["id"].intValue
-                                user.login = users["login"].stringValue
-                                room.users.append(user)
+                            room.id = jsonData[i]["id"].intValue
+                            if !jsonData[i]["users"].isEmpty {
+                                for j in 0...jsonData[i]["users"].count-1 {
+                                    var user: User = User()
+                                    user.id = jsonData[i]["users"][j]["id"].intValue
+                                    user.login = jsonData[i]["users"][j]["login"].stringValue
+                                    room.users.append(user)
+                                }
                             }
                             result.append(room)
                         }
-                        
                     } else {
                         println("data_is_empty")
                     }
@@ -93,9 +94,14 @@ class ChatRoomsService {
     private func make_request_createRoom(users: [User], completion_request: (result: Room) -> Void) -> Void {
         
         var result: Room = Room()
+        var arrayOfUsers = [NSDictionary]()
+        for i in 0...users.count-1 {
+            arrayOfUsers.append(["id": users[i].id, "login": users[i].login])
+        }
+        
         let parameters = [
-            "users": [["id": users[0].id, "login": users[0].login]]
-            //"users": users
+            //"users": [["id": users[0].id, "login": users[0].login]]
+            "users": arrayOfUsers
         ]
         
         Alamofire.request(.POST, "\(ServerPath)/v1/rooms", parameters: parameters, headers: headers, encoding: .JSON)

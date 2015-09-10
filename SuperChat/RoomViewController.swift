@@ -9,12 +9,15 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var viewHieghtConstraint: NSLayoutConstraint! //высота элемента view, содержащего поле messageTextField и sendButton
+    @IBOutlet weak var sendArea: UIView!
+    
     
     //текущие размеры экрана
     let screenHeigth = UIScreen.mainScreen().applicationFrame.height
     let screenWidth = UIScreen.mainScreen().applicationFrame.width
     
     var messagesArray: [String] = [String]()
+    var currentRoom = ChatRoomsService.Room()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +25,8 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.messageTableView.dataSource = self
         self.messageTextField.delegate = self
         
+        
+        //self.sendArea.frame.origin.y
         //Add a tap gesture recognizer to the Table View
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tableViewTapped")
         self.messageTableView.addGestureRecognizer(tapGesture)
@@ -57,11 +62,14 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: TextField delegate methods
     func textFieldDidBeginEditing(textField: UITextField) {
         //Perform an animation to grow the view
+        /*
         self.view.layoutIfNeeded()
         UIView.animateWithDuration(0.4, animations: {
-            self.viewHieghtConstraint.constant = 350
+            self.viewHieghtConstraint.constant = 500
             self.view.layoutIfNeeded()
             }, completion: nil)
+*/
+        self.sendArea.frame.origin.y = 300
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
@@ -75,12 +83,10 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK: TableView delegate methods
     
-    
-    
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = self.messageTableView.dequeueReusableCellWithIdentifier("MessageCell") as! UITableViewCell
+        //let cell = self.messageTableView.dequeueReusableCellWithIdentifier("MessageCell") as! UITableViewCell
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "MessageCell")
         cell.textLabel?.text = self.messagesArray[indexPath.row]
         return cell
         

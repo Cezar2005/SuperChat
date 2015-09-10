@@ -6,6 +6,7 @@ import SwiftyJSON
 class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate, UIAlertViewDelegate {
     
     var searchResult: [ChatRoomsService.User] = []
+    var selectedRoom = ChatRoomsService.Room()
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -47,28 +48,43 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
         )
     }
     
-    //Обработка выбора строки
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        var alertQuestion = UIAlertView()
-        alertQuestion.title = "Чат"
-        alertQuestion.message = "Создать чат с \(searchResult[indexPath.row].login)?"
-        alertQuestion.addButtonWithTitle("Отмена")
-        alertQuestion.addButtonWithTitle("OK")
-        alertQuestion.show()
-        
+    //переопределение функции подготовки к переходу по идентификатору. Передача значения выбранной комнаты в целевой ViewController
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "SearchToRoom" {
+            let roomVC = segue.destinationViewController as! RoomViewController
+            roomVC.currentRoom = self.selectedRoom
+        }
     }
     
-    //Обработка нажатия кнопок на алерте
-    func alertView(alertView:UIAlertView, clickedButtonAtIndex buttonIndex:Int){
-        
-        //Если нажата кнопка "ОК" (индекс 1)
-        if buttonIndex == 1 {
-            // обработка нажатия кнопки ок
+    //Обработка выбора строки tableView
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
-        } else {
-            alertView.hidden = true
+        // Create the alert controller
+        var alertController = UIAlertController(title: "Создать чат с '\(searchResult[indexPath.row].login)'?", message: "", preferredStyle: .Alert)
+        
+        // Create the actions
+        var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            var usersForRoom: [ChatRoomsService.User] = []
+            usersForRoom.append(self.searchResult[indexPath.row])
+            ChatRoomsService().createRoom(usersForRoom, completion_request:
+                {(result: ChatRoomsService.Room) -> Void in
+                    self.selectedRoom = result
+                    self.performSegueWithIdentifier("SearchToRoom", sender: self)
+                }
+            )
         }
+        var cancelAction = UIAlertAction(title: "Отмена", style: UIAlertActionStyle.Cancel) {
+            UIAlertAction in
+            tableView.cellForRowAtIndexPath(indexPath)?.selected = false
+        }
+        
+        // Add the actions
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        // Present the controller
+        self.presentViewController(alertController, animated: true, completion: nil)
         
     }
     

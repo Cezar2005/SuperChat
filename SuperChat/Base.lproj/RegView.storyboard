@@ -191,35 +191,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="eu1-xU-FVC">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="5hB-6p-bo8">
                                 <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="600" id="VwH-jN-sdM"/>
-                                </constraints>
                                 <connections>
-                                    <outlet property="dataSource" destination="nnL-7p-T3U" id="qtp-w7-cQw"/>
-                                    <outlet property="delegate" destination="nnL-7p-T3U" id="fCy-Kx-Wdd"/>
+                                    <outlet property="dataSource" destination="nnL-7p-T3U" id="Dv8-rK-zT6"/>
+                                    <outlet property="delegate" destination="nnL-7p-T3U" id="xfS-FR-AWy"/>
                                 </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="eu1-xU-FVC" firstAttribute="bottom" secondItem="amZ-EI-qFV" secondAttribute="top" constant="49" id="C6B-6y-zF5"/>
-                            <constraint firstItem="eu1-xU-FVC" firstAttribute="top" secondItem="A9v-EO-d1z" secondAttribute="bottom" id="JgM-FE-rU3"/>
-                            <constraint firstItem="eu1-xU-FVC" firstAttribute="leading" secondItem="hwg-yU-jwm" secondAttribute="leadingMargin" id="Qyx-3i-JQg"/>
-                            <constraint firstAttribute="trailing" secondItem="eu1-xU-FVC" secondAttribute="trailing" id="VIU-I4-EXy"/>
-                            <constraint firstItem="eu1-xU-FVC" firstAttribute="leading" secondItem="hwg-yU-jwm" secondAttribute="leading" id="jKW-rn-lTK"/>
+                            <constraint firstAttribute="width" secondItem="5hB-6p-bo8" secondAttribute="width" id="hb9-6d-Yhr"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Qyx-3i-JQg"/>
-                                <exclude reference="jKW-rn-lTK"/>
-                            </mask>
-                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Мои чаты" image="Icon_MyChat" id="8f8-85-Bue"/>
                     <connections>
+                        <outlet property="tableView" destination="5hB-6p-bo8" id="Ony-DH-1kg"/>
                         <segue destination="xPU-Jd-EEE" kind="show" identifier="MyChatToRoom" id="eTh-xi-2uo"/>
                     </connections>
                 </viewController>
@@ -390,16 +378,16 @@
                         <viewControllerLayoutGuide type="bottom" id="NaV-gq-W85"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="huq-Cj-QSa">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BfM-cs-e1F">
+                            <navigationBar contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BfM-cs-e1F">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Title" id="782-vr-QoT"/>
+                                    <navigationItem title="Title" id="kHc-KT-gzq"/>
                                 </items>
                             </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3Iq-jJ-rfV">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3Iq-jJ-rfV">
                                 <rect key="frame" x="0.0" y="64" width="600" height="448"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -429,28 +417,37 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="D38-OX-xhV" secondAttribute="trailing" constant="5" id="20y-0e-6G5"/>
-                                    <constraint firstItem="D38-OX-xhV" firstAttribute="top" secondItem="Lkn-rI-Z5F" secondAttribute="top" constant="5" id="LBO-Ae-cfj"/>
-                                    <constraint firstItem="KzR-LT-jYF" firstAttribute="leading" secondItem="Lkn-rI-Z5F" secondAttribute="leading" constant="10" id="LZs-Gc-rJV"/>
+                                    <constraint firstAttribute="trailing" secondItem="D38-OX-xhV" secondAttribute="trailing" id="20y-0e-6G5"/>
+                                    <constraint firstItem="D38-OX-xhV" firstAttribute="top" secondItem="Lkn-rI-Z5F" secondAttribute="top" id="LBO-Ae-cfj"/>
+                                    <constraint firstItem="KzR-LT-jYF" firstAttribute="leading" secondItem="Lkn-rI-Z5F" secondAttribute="leading" id="LZs-Gc-rJV"/>
                                     <constraint firstAttribute="height" constant="40" id="SLo-l7-yy3"/>
-                                    <constraint firstItem="KzR-LT-jYF" firstAttribute="top" secondItem="Lkn-rI-Z5F" secondAttribute="top" constant="10" id="dNb-iE-3NX"/>
-                                    <constraint firstItem="D38-OX-xhV" firstAttribute="leading" secondItem="KzR-LT-jYF" secondAttribute="trailing" constant="5" id="yXQ-xE-WBX"/>
+                                    <constraint firstItem="KzR-LT-jYF" firstAttribute="top" secondItem="Lkn-rI-Z5F" secondAttribute="top" id="dNb-iE-3NX"/>
+                                    <constraint firstItem="D38-OX-xhV" firstAttribute="leading" secondItem="KzR-LT-jYF" secondAttribute="trailing" id="yXQ-xE-WBX"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Lkn-rI-Z5F" firstAttribute="width" secondItem="huq-Cj-QSa" secondAttribute="width" id="0Ld-kh-wL5"/>
+                            <constraint firstItem="BfM-cs-e1F" firstAttribute="width" secondItem="huq-Cj-QSa" secondAttribute="width" id="3JA-9d-W5X"/>
+                            <constraint firstItem="BfM-cs-e1F" firstAttribute="top" secondItem="Z2r-rW-FOC" secondAttribute="bottom" id="6V2-xa-H3f"/>
+                            <constraint firstItem="3Iq-jJ-rfV" firstAttribute="top" secondItem="Z2r-rW-FOC" secondAttribute="bottom" constant="44" id="Chw-Jo-mGO"/>
+                            <constraint firstItem="3Iq-jJ-rfV" firstAttribute="width" secondItem="huq-Cj-QSa" secondAttribute="width" id="UtE-nX-7HM"/>
+                            <constraint firstItem="BfM-cs-e1F" firstAttribute="top" secondItem="Z2r-rW-FOC" secondAttribute="bottom" id="ouD-x1-lE2"/>
+                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <connections>
                         <outlet property="messageTableView" destination="3Iq-jJ-rfV" id="4gX-rR-qlZ"/>
                         <outlet property="messageTextField" destination="KzR-LT-jYF" id="BIs-PA-7EM"/>
+                        <outlet property="sendArea" destination="Lkn-rI-Z5F" id="VeD-aE-lUn"/>
                         <outlet property="sendButton" destination="D38-OX-xhV" id="0rB-Fk-EIa"/>
                         <outlet property="viewHieghtConstraint" destination="SLo-l7-yy3" id="CJz-Km-iqb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j82-DM-I7h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="935" y="2553"/>
+            <point key="canvasLocation" x="965" y="2653"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Alf-1a-gzQ">
@@ -512,8 +509,8 @@
         <image name="Icon_Settings" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="U4f-P7-siA"/>
-        <segue reference="SV3-zH-Mfl"/>
+        <segue reference="G3a-dp-EwZ"/>
+        <segue reference="BJN-nl-hfI"/>
         <segue reference="9d8-Tk-117"/>
     </inferredMetricsTieBreakers>
 </document>
