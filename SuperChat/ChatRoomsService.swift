@@ -9,14 +9,25 @@ class ChatRoomsService {
     let ServerPath: String = ClientAPI().ServerPath
     let curSession: String = Realm().objects(currSession2)[0].session_id
     let headers: [String: String]
+    
     struct User {
         var id: Int = 0
         var login: String = ""
     }
+    
     struct Room {
         var id: Int = 0
         var users: [User] = []
     }
+    
+    struct Message {
+        var text: String = ""
+        var userSenderId: Int = 0
+        var roomId: Int = 0
+        var dateTimeCreated = NSDate()
+    }
+    
+    var formatter = NSDateFormatter()
     
     //Init function
     init () {
@@ -25,10 +36,15 @@ class ChatRoomsService {
             "Accept": "application/json",
             "Content-type": "application/json"
         ]
+        
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        
     }
     
     //Public functions
-    func availableRooms(completion_request: (resilt: [Room]) -> Void) -> [Room] {
+    func availableRooms(completion_request: (result: [Room]) -> Void) -> [Room] {
         
         var response: [Room] = []
         
@@ -51,9 +67,13 @@ class ChatRoomsService {
         return result
     }
     
-    func historyRoom(id_room: String) -> [[String:String]] {
-        var result = [[String:String]]()
-        return result
+    func historyRoom(id_room: Int, completion_request: (result: [Message]) -> Void) -> [Message] {
+        
+        var response: [Message] = []
+        
+        make_request_historyRoom(id_room, completion_request: completion_request)
+        
+        return response
     }
     
     //Private functions. Provides performance of public functions.
@@ -132,5 +152,34 @@ class ChatRoomsService {
         
     }
     
+    private func make_request_historyRoom(id_room: Int, completion_request: (result: [Message]) -> Void) -> Void {
+        
+        var result: [Message] = []
+        
+        Alamofire.request(.GET, "\(ServerPath)/v1/rooms/\(id_room)/messages", headers: headers, encoding: .JSON)
+            .responseJSON { request, response, data, error in
+                if(error != nil) {
+                    println("Error: \(error)")
+                    println("Request: \(request)")
+                    println("Response: \(response)")
+                } else {
+                    var jsonData = JSON(data!)
+                    if !jsonData.isEmpty {
+                        for i in 0...jsonData.count-1 {
+                            var message: Message = Message()
+                            message.text = jsonData[i]["text"].stringValue
+                            message.userSenderId = jsonData[i]["user_id"].intValue
+                            message.roomId = jsonData[i]["room_id"].intValue
+                            message.dateTimeCreated = self.formatter.dateFromString(jsonData[i]["created_at"].stringValue)!
+                            result.append(message)
+                        }
+                    } else {
+                        println("data_is_empty")
+                    }
+                }
+                completion_request(result: result)
+        }
+        
+    }
     
 }
