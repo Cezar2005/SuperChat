@@ -2,6 +2,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import RealmSwift
+import SwiftWebSocket
 
 class ChatRoomsService {
     
@@ -39,6 +40,7 @@ class ChatRoomsService {
         
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        formatter.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierISO8601)!
         formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         
     }
@@ -62,10 +64,6 @@ class ChatRoomsService {
         return response
     }
     
-    func infoAboutRoom(id_room: String) -> [String: AnyClass] {
-        var result: [String: AnyClass] = [:]
-        return result
-    }
     
     func historyRoom(id_room: Int, completion_request: (result: [Message]) -> Void) -> [Message] {
         
@@ -75,6 +73,7 @@ class ChatRoomsService {
         
         return response
     }
+
     
     //Private functions. Provides performance of public functions.
     private func make_request_availableRooms(completion_request: (result: [Room]) -> Void) -> Void {
@@ -181,5 +180,7 @@ class ChatRoomsService {
         }
         
     }
+    
+    
     
 }
