@@ -10,6 +10,8 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextBottom: NSLayoutConstraint!
+    @IBOutlet weak var NavBarItem: UINavigationItem!
+    
 
     var messagesArray: [ChatRoomsService.Message] = []
     var currentRoom = ChatRoomsService.Room()
@@ -44,6 +46,12 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Получение информаци о текущем пользователе.
         InfoUserService().infoAboutUser( {(result: [String: String]) -> Void in
             self.currUser = result
+            //Узнаем, кто наш собеседник
+            for user in self.currentRoom.users {
+                if String(user.id) != self.currUser["id"] {
+                    self.NavBarItem.title! = "Чат с \(user.login)"
+                }
+            }
         })
         
         //Если поле ввода пустое, то кнопка отпраки не активна
@@ -53,6 +61,8 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Инициализируем WebSocket
         initWebSocket()
+        
+        
        
     }
     
