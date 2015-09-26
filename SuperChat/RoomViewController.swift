@@ -1,8 +1,8 @@
 import UIKit
 import Alamofire
-import SwiftWebSocket
 import RealmSwift
 import SwiftyJSON
+import Starscream
 
 class RoomViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
 
@@ -11,12 +11,12 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextBottom: NSLayoutConstraint!
 
-    //текущие размеры экрана
     var messagesArray: [ChatRoomsService.Message] = []
     var currentRoom = ChatRoomsService.Room()
     var currUser:[String: String] = [:]
     
     let ServerPath: String = ClientAPI().ServerPath
+    let SocketPath: String = ClientAPI().SocketPath
     var curSession: String = Realm().objects(currSession2)[0].session_id
     var ws : WebSocket!
 
@@ -38,13 +38,12 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             (result: [ChatRoomsService.Message]) -> Void in
             self.messagesArray = result
             self.messageTableView.reloadData()
-        
+            self.positioningOnLastMessage(false)
         })
         
-        //Получение информаци о текущем пользователе. Получение информации о доступных комнатах для текущего пользователя.
+        //Получение информаци о текущем пользователе.
         InfoUserService().infoAboutUser( {(result: [String: String]) -> Void in
             self.currUser = result
-            self.messageTableView.reloadData()
         })
         
         //Если поле ввода пустое, то кнопка отпраки не активна
@@ -52,6 +51,9 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.sendButton.enabled = false
         }
         
+        //Инициализируем WebSocket
+        initWebSocket()
+       
     }
     
     deinit {
@@ -66,7 +68,6 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    
     @IBAction func messageTextFieldEditingDidEnd(sender: UITextField) {
         
         if !sender.text.isEmpty {
@@ -74,9 +75,6 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
     }
-    
-    
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -91,7 +89,6 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageSent.dateTimeCreated = NSDate()
 
         sendMessage(messageSent)
-        //вызвать send message и передать в него sendingMessage
         
     }
     
@@ -100,8 +97,6 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.messageTextField.endEditing(true)
         
     }
-    
-    
     
     func keyboardWasShown(notification: NSNotification) {
         var info = notification.userInfo!
@@ -144,7 +139,6 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         return cell
-        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,16 +148,15 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             return 0
         }
-        
     }
     
     private func sendMessage(message: ChatRoomsService.Message) -> Void {
-        //сформировать json из message
+
         var messageJSON: JSON = [
+            "created_at":"",
             "text":"",
-            "user_id":"",
-            "room_id":"",
-            "created_at":""
+            "user_id":0,
+            "room_id":0
         ]
         
         messageJSON["text"].string = message.text
@@ -171,52 +164,60 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageJSON["room_id"].int = message.roomId
         messageJSON["created_at"].string = ChatRoomsService().formatter.stringFromDate(message.dateTimeCreated)
         
-        
-        /*
-        var messageJSON:JSON = [
-            "text":message.text,
-            "user_id":message.userSenderId,
-            "room_id":message.roomId,
-            "created_at":ChatRoomsService().formatter.stringFromDate(message.dateTimeCreated)
-        ]*/
-
-        let str: String = "{\"text\":\"И тебе привет\",\"user_id\":1,\"room_id\":10,\"created_at\":\"2015-08-06T13:44:07\"}"
-        
-        //'{"text":"И тебе привет","user_id":1,"room_id":10,"created_at":"2015-08-06T13:44:07"}'
-        //self.ws.send(messageJSON.rawString()!)
-        self.ws.send(str)
+        self.ws.writeString(messageJSON.rawString()!)
         self.messagesArray.append(message)
         self.messageTableView.reloadData()
+        self.positioningOnLastMessage(true)
     }
     
-    private func initWebSocket(message: ChatRoomsService.Message) -> Void {
+    private func initWebSocket() -> Void {
         
-        self.ws = WebSocket(url: "wss://\(ServerPath)/v1/rooms/\(currentRoom.id)/chat?session_id=\(curSession)")
+        self.ws = WebSocket(url: NSURL(scheme: "ws", host: "\(self.SocketPath)", path: "/v1/rooms/\(self.currentRoom.id)/chat?session_id=\(self.curSession)")!)
+        //websocketDidConnect
         
-        ws.event.open = {
-            print("opened")
+        self.ws.onConnect = {
+            println("websocket is connected")
         }
-        ws.event.close = { code, reason, clean in
-            print("close")
+        //websocketDidDisconnect
+        self.ws.onDisconnect = { (error: NSError?) in
+            println("websocket is disconnected: \(error?.localizedDescription)")
         }
-        ws.event.error = { error in
-            print("error \(error)")
-        }
-        ws.event.message = { message in
-            //result = распарсить message {"text":"И тебе привет","user_id":1,"room_id":10,"created_at":"2015-08-06T13:44:07"}
-            var result = ChatRoomsService.Message()
-            if var messageJSON = message as? NSDictionary {
-                result.text = messageJSON["text"]!.stringValue
-                result.userSenderId = Int(messageJSON["user_id"]!.intValue)
-                result.roomId = Int(messageJSON["room_id"]!.intValue)
-                result.dateTimeCreated = ChatRoomsService().formatter.dateFromString(messageJSON["created_at"]!.stringValue)!
-            }
+        //websocketDidReceiveMessage
+        self.ws.onText = { (text: String) in
+            println("got some text: \(text)")
+            if !text.isEmpty {
+                var result = ChatRoomsService.Message()
+                var textToDictionary = UtilityClasses().convertStringToDictionary(text)
+                result.text = textToDictionary!["text"]! as! String
+                result.userSenderId = textToDictionary!["user_id"]! as! Int
+                result.roomId = textToDictionary!["room_id"]! as! Int
+                result.dateTimeCreated = { () -> NSDate in
+                    var formatter = ChatRoomsService().formatter
+                    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    let date = formatter.dateFromString(textToDictionary!["created_at"]! as! String)
+                    return date!
+                }()
                 self.messagesArray.append(result)
                 self.messageTableView.reloadData()
+                self.positioningOnLastMessage(true)
+                
+            }
         }
+        //websocketDidReceiveData
+        self.ws.onData = { (data: NSData) in
+            println("got some data: \(data.length)")
+        }
+        //you could do onPong as well.
+        self.ws.connect()
         
     }
     
-    
+    private func positioningOnLastMessage(animated: Bool) -> Void {
+        let numberOfRows = self.messageTableView.numberOfRowsInSection(self.messageTableView.numberOfSections()-1)
+        if numberOfRows > 0 {
+            let indexPath = NSIndexPath(forRow: numberOfRows-1, inSection: (self.messageTableView.numberOfSections()-1))
+            self.messageTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: animated)
+        }
+    }
     
 }

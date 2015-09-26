@@ -162,6 +162,7 @@ class ChatRoomsService {
                     println("Request: \(request)")
                     println("Response: \(response)")
                 } else {
+                    if data != nil {
                     var jsonData = JSON(data!)
                     if !jsonData.isEmpty {
                         for i in 0...jsonData.count-1 {
@@ -169,11 +170,14 @@ class ChatRoomsService {
                             message.text = jsonData[i]["text"].stringValue
                             message.userSenderId = jsonData[i]["user_id"].intValue
                             message.roomId = jsonData[i]["room_id"].intValue
-                            message.dateTimeCreated = self.formatter.dateFromString(jsonData[i]["created_at"].stringValue)!
+                            if self.formatter.dateFromString(jsonData[i]["created_at"].stringValue) != nil {
+                                message.dateTimeCreated = self.formatter.dateFromString(jsonData[i]["created_at"].stringValue)!
+                            }
                             result.append(message)
                         }
                     } else {
                         println("data_is_empty")
+                    }
                     }
                 }
                 completion_request(result: result)
