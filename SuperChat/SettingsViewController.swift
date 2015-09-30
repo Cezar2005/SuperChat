@@ -4,18 +4,29 @@ import SwiftyJSON
 
 class SettingsViewController: UIViewController {
     
+    @IBOutlet weak var LoginLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        InfoUserService().infoAboutUser( {(result: [String: String]) -> Void in
+            
+            if !result.isEmpty {
+                self.LoginLabel.text! = result["login"]!
+            } else {
+                self.LoginLabel.hidden = false
+            }
+        })
+        
+    }
+    
     @IBAction func Logout() {
         //Выполнение логаута
-        Alamofire.request(.POST, "http://localhost:8081/v1/logout")
-            .responseJSON { request, response, data, error in
-                if(error != nil) {
-                    println("Error: \(error)")
-                    println("Request: \(request)")
-                    println("Response: \(response)")
-                } else {
-                    self.performSegueWithIdentifier("SettingsToLogin", sender: self)
-                }
+        LoginService().logout({(result: Bool) -> Void in
+            if result {
+                self.performSegueWithIdentifier("SettingsToLogin", sender: self)
             }
+        })
     }
     
     

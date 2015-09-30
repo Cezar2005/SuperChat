@@ -11,7 +11,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextBottom: NSLayoutConstraint!
     @IBOutlet weak var NavBarItem: UINavigationItem!
-    
+    @IBOutlet weak var backButton: UIBarButtonItem!
 
     var messagesArray: [ChatRoomsService.Message] = []
     var currentRoom = ChatRoomsService.Room()
@@ -25,6 +25,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         self.messageTableView.delegate = self
         self.messageTableView.dataSource = self
         self.messageTextField.delegate = self
@@ -49,7 +50,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             //Узнаем, кто наш собеседник
             for user in self.currentRoom.users {
                 if String(user.id) != self.currUser["id"] {
-                    self.NavBarItem.title! = "Чат с \(user.login)"
+                    self.backButton.title! = "← Chat with \(user.login)"
                 }
             }
         })
@@ -61,9 +62,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Инициализируем WebSocket
         initWebSocket()
-        
-        
-       
+    
     }
     
     deinit {
@@ -109,42 +108,46 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func keyboardWasShown(notification: NSNotification) {
+
         var info = notification.userInfo!
         var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        
+            
         UIView.animateWithDuration(0.4, animations: { () -> Void in
             self.messageTextBottom.constant = self.messageTextBottom.constant + keyboardFrame.size.height //БАГ! Поправить! При смене языка клавиатура ползет вверх! )
         })
+        
     }
     
     func keyboardWasHide(notification: NSNotification) {
+
         var info = notification.userInfo!
         var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        
+            
         UIView.animateWithDuration(0.1, animations: { () -> Void in
             self.messageTextBottom.constant = 8
         })
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "MessageCell")
-        
         if !self.messagesArray.isEmpty {
             var currMessage = self.messagesArray[indexPath.row]
             cell.textLabel?.text = currMessage.text
             cell.detailTextLabel?.text = "\(currMessage.dateTimeCreated.description)"
             if String(currMessage.userSenderId) == self.currUser["id"] {
                 //Сообщения от меня (т.е. мое), меняем цвет на #5eb964 (rgb(94,185,100)) и делаем выравнивание по правому краю
-                cell.backgroundColor = UIColor(red: 0.094, green: 0.185, blue: 0.100, alpha: 0.5)
-                cell.textLabel?.textColor = UIColor.whiteColor()
-                cell.textLabel?.textAlignment = .Right
-                cell.detailTextLabel?.textAlignment = .Right
+                cell.backgroundColor = UIColor(red: 0.094, green: 0.185, blue: 0.100, alpha: 1.0)
+                cell.textLabel!.textColor = UIColor.whiteColor()
+                cell.textLabel!.textAlignment = NSTextAlignment.Right
+                cell.detailTextLabel!.textAlignment = NSTextAlignment.Right
+                cell.contentView.frame = CGRectMake(0, 0, tableView.frame.size.width, 100)
             } else {
                 //Сообщения не от меня (т.е. мне), меняем цвет на #e5e7eb (rgb(229,231,235)) и делаем выравнивание по левому краю
-                cell.backgroundColor = UIColor(red: 0.229, green: 0.231, blue: 0.235, alpha: 0.5)
-                cell.textLabel?.textAlignment = .Left
-                cell.detailTextLabel?.textAlignment = .Left
+                cell.backgroundColor = UIColor(red: 0.229, green: 0.231, blue: 0.235, alpha: 1.0)
+                cell.textLabel?.textAlignment = NSTextAlignment.Justified
+                cell.detailTextLabel?.textAlignment = NSTextAlignment.Justified
             }
         }
         

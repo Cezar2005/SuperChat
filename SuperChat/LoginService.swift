@@ -1,11 +1,23 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import RealmSwift
 
 class LoginService {
     
     //Properties
     let ServerPath: String = ClientAPI().ServerPath
+    let curSession: String = Realm().objects(currSession2)[0].session_id
+    let headers: [String: String]
+    
+    //Init function
+    init () {
+        self.headers = [
+            "X-Session-Id": "\(self.curSession)",
+            "Accept": "application/json",
+            "Content-type": "application/json"
+        ]
+    }
     
     //Public functions
     func perform(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
@@ -23,6 +35,12 @@ class LoginService {
         }
         
         return response
+        
+    }
+    
+    func logout(completion_request: (result: Bool) -> Void) -> Void {
+        
+        make_request_logout(completion_request)
         
     }
     
@@ -58,4 +76,22 @@ class LoginService {
     private func process_error() -> [String: String]  {
         return ["error": "wrong_credentials"]
     }
+    
+    private func make_request_logout(completion_request: (result: Bool) -> Void) -> Void {
+        
+        var result = false
+        
+        Alamofire.request(.POST, "\(ServerPath)/v1/logout", headers: headers).responseJSON
+            { request, response, data, error in
+                if(error != nil) {
+                    println("Error: \(error)")
+                    println("Request: \(request)")
+                    println("Response: \(response)")
+                } else {
+                    completion_request(result: true)
+                }
+        }
+        
+    }
+    
 }

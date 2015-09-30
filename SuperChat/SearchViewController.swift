@@ -38,7 +38,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
                 self.searchResult = result
                 if self.searchResult.count == 0 {
                     let alert = UIAlertView()
-                    alert.title = "Пользователь \(searchBar.text) не найден"
+                    alert.title = "User \(searchBar.text) not found"
                     alert.addButtonWithTitle("OK")
                     alert.show()
                 }
@@ -60,7 +60,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
         // Create the alert controller
-        var alertController = UIAlertController(title: "Создать чат с '\(searchResult[indexPath.row].login)'?", message: "", preferredStyle: .Alert)
+        var alertController = UIAlertController(title: "Create chat with '\(searchResult[indexPath.row].login)'?", message: "", preferredStyle: .Alert)
         
         // Create the actions
         var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
@@ -74,7 +74,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
                 }
             )
         }
-        var cancelAction = UIAlertAction(title: "Отмена", style: UIAlertActionStyle.Cancel) {
+        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) {
             UIAlertAction in
             tableView.cellForRowAtIndexPath(indexPath)?.selected = false
         }
