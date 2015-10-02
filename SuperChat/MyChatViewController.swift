@@ -4,19 +4,26 @@ import SwiftWebSocket
 import SwiftyJSON
 import RealmSwift
 
+//The ViewController of available chat rooms.
 class MyChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    /* ViewController properties.
+    'currUser' - it's dictionary for current session.
+    'availableUserRooms' - it's dictionary for list of available user room for current user.
+    'selectedRoom' - it's implementation of chat room object in list, that was selected by user.
+    'tavleView' - it's UI TableView. It contains the list of chat rooms.
+    */
     var currUser:[String: String] = [:]
     var availableUserRooms: [ChatRoomsService.Room] = []
     var selectedRoom = ChatRoomsService.Room()
     
     @IBOutlet weak var tableView: UITableView!
     
+    //The function gets information about current user and then gets information about available chat rooms for him.
     override func viewDidLoad() {
     
         super.viewDidLoad()
         
-        //Получение информаци о текущем пользователе. Получение информации о доступных комнатах для текущего пользователя.
         InfoUserService().infoAboutUser( {(result1: [String: String]) -> Void in
             self.currUser = result1
             ChatRoomsService().availableRooms( {(result2: [ChatRoomsService.Room]) -> Void in
@@ -26,7 +33,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         })
     }
     
-    //переопределение функции подготовки к переходу по идентификатору. Передача значения выбранной комнаты в целевой ViewController
+    //The function sends entity of selected chat room from list into segue between screen.
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "MyChatToRoom" {
             let roomVC = segue.destinationViewController as! RoomViewController
@@ -34,7 +41,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    //Обработка выбора строки tableView
+    //This is line treatment of choice in tavleView.
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if !self.availableUserRooms.isEmpty {
             self.selectedRoom = self.availableUserRooms[indexPath.row]
@@ -42,7 +49,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    //Функция возвращает количество строк, которое надо выводить в таблице
+    //The function returns number of rows in tableView that will be displayed on screen.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if !self.availableUserRooms.isEmpty {
@@ -53,7 +60,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
-    //Функция возвращает ячейку таблицы для вывода.
+    //The function returns the cell of tableView. The cells content login of the users.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "MyTestSwiftCell")

@@ -4,9 +4,18 @@ import SwiftyJSON
 import RealmSwift
 import SwiftWebSocket
 
+//The service provides methods for chat room.
 class ChatRoomsService {
     
-    //Properties
+    /* Class properties.
+    'ServerPath' - it's http path to server.
+    'curSession' - it's string value of current session ID.
+    'headers' - it's headers for http request that containts session ID, accept type and content type.
+    
+    'User', 'Room', 'Message' - the structures that define properties of entity as User, Room (it containts the users and user messages), Message.
+    
+    'formatter' - it's formatter for time of message.
+    */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
     let headers: [String: String]
@@ -30,7 +39,6 @@ class ChatRoomsService {
     
     var formatter = NSDateFormatter()
     
-    //Init function
     init () {
         
         if Realm().objects(currSession2).count != 0 {
@@ -50,7 +58,11 @@ class ChatRoomsService {
         
     }
     
-    //Public functions
+    /* Public functions.
+    'availableRooms()' - the function that gets available chat rooms for current user.
+    'createRoom()' - the function that creates a new chat room with any user.
+    'historyRoom()' - the function that get a messages history in current chat room.
+    */
     func availableRooms(completion_request: (result: [Room]) -> Void) -> [Room] {
         
         var response: [Room] = []
@@ -80,7 +92,12 @@ class ChatRoomsService {
     }
 
     
-    //Private functions. Provides performance of public functions.
+    /* Private functions.
+    'make_request_availableRooms()'
+    'make_request_createRoom()'
+    'make_request_historyRoom()'
+    These functions directly perform GET or POST requests to server. It use the Alamofire framework.
+    */
     private func make_request_availableRooms(completion_request: (result: [Room]) -> Void) -> Void {
         
         var result: [Room] = []
@@ -124,7 +141,6 @@ class ChatRoomsService {
         }
         
         let parameters = [
-            //"users": [["id": users[0].id, "login": users[0].login]]
             "users": arrayOfUsers
         ]
         

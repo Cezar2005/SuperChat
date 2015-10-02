@@ -3,14 +3,18 @@ import Alamofire
 import SwiftyJSON
 import RealmSwift
 
+//The service provides methods for authorization on server.
 class LoginService {
     
-    //Properties
+    /* Class properties.
+        'ServerPath' - it's http path to server.
+        'curSession' - it's string value of current session ID.
+        'headers' - it's headers for http request that containts session ID, accept type and content type.
+    */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
     let headers: [String: String]
     
-    //Init function
     init () {
         
         if Realm().objects(currSession2).count != 0 {
@@ -22,10 +26,12 @@ class LoginService {
             "Accept": "application/json",
             "Content-type": "application/json"
         ]
-
     }
     
-    //Public functions
+    /* Public functions.
+        'perform()' - the function that takes login and password, checks them and gives them into request.
+        'logout()' - the function that does logut user.
+    */
     func perform(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var loginIsAvalible = true
         var response: [String: String] = [:]
@@ -38,6 +44,7 @@ class LoginService {
             make_request(login, password: password, completion_request: completion_request)
         } else {
             response = process_error()
+            completion_request(result: response)
         }
         
         return response
@@ -50,7 +57,11 @@ class LoginService {
         
     }
     
-    //Private functions. Provides performance of public functions.
+    /* Private functions.
+        'make_request()' - the function that directly performs POST request to server for user login. It uses the Alamofire framework.
+        'process_error()' - the function that returns error when login or password are empty. It's UI error.
+        'make_request_logout()' - the function that directly performs POST request to server for user logout. It uses the Alamofire framework.
+    */
     private func make_request(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> Void  {
         
         var result: [String: String] = [:]
@@ -62,18 +73,22 @@ class LoginService {
                     println("Request: \(request)")
                     println("Response: \(response)")
                 } else {
-                    var jsonData = JSON(data!)
-                    if !jsonData.isEmpty {
-                        if !jsonData["session_id"].isEmpty {
-                            result["session_id"] = jsonData["session_id"].stringValue
+                        var jsonData = JSON(data!)
+                        if !jsonData.isEmpty {
+                            if jsonData["error"]["code"].stringValue == "user_not_found" {
+                                result["error"] = "user_not_found"
+                            } else {
+                                if !jsonData["session_id"].isEmpty {
+                                    result["session_id"] = jsonData["session_id"].stringValue
+                                } else {
+                                    result["error"] = jsonData["error"]["code"].stringValue
+                                    println("Параметр session_id пуст")
+                                }
+                            }
                         } else {
-                            result["error"] = jsonData["error"]["code"].stringValue
-                            println("Параметр session_id пуст")
+                            result["error"] = "data_is_empty"
+                            println("Параметр data в ответе на запрос пуст")
                         }
-                    } else {
-                        result["error"] = "data_is_empty"
-                        println("Параметр data в ответе на запрос пуст")
-                    }
                 }
                 completion_request(result: result)
         }

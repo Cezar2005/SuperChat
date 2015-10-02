@@ -4,14 +4,24 @@ import SwiftWebSocket
 import SwiftyJSON
 import RealmSwift
 
+//The registration ViewController. It creates a new user and logging him automatically.
 class RegViewController: UIViewController {
     
     @IBOutlet weak var LoginField: UITextField!
     @IBOutlet weak var PassField: UITextField!
     @IBOutlet weak var PassRepeatField: UITextField!
+    
+    /* ViewController properties.
+    'session' - it's entity for current session.
+    'realm' - it's implementation of local data base object.
+    */
     var session = currSession2()
     let realm = Realm()
     
+    /*  'touchesBegan()' - it's override of the default function that hides a keyboard after end editing.
+        'getResultOperation()' - it's function for closure. The function argument 'response' containts the session ID. Available of session ID is successful of registration. Session will be write into object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
+        'Registration()' - it's starts registration process. It's UI Action (click on the "Create account" button).
+    */
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
     }
@@ -19,15 +29,11 @@ class RegViewController: UIViewController {
     func getResultOperation(response: [String: String]) -> Void {
         if response["error"] == nil {
             self.session.session_id = response["session_id"]!
-            //self.session.session_id = "2e2a55e1-3967-4e75-bfb1-7151b823ca6f"
-            //Запишем сессию в локальную БД
             self.realm.write {
                 self.realm.deleteAll()
                 self.realm.add(self.session)
             }
-            
-            //Переходим в экран "Мои чаты"
-            self.performSegueWithIdentifier("RegToChatList", sender: self)
+            self.performSegueWithIdentifier("RegToChatList", sender: self) //Successful registration. Go to Chat list screen.
         } else {
             switch response["error"]! {
             case "data_is_empty":

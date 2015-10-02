@@ -3,16 +3,21 @@ import Alamofire
 import SwiftyJSON
 import RealmSwift
 
+//The service provides methods for getting information about users.
 class InfoUserService {
     
-    //Properties
+    /* Class properties.
+    'ServerPath' - it's http path to server.
+    'curSession' - it's string value of current session ID.
+    'headers' - it's headers for http request that containts session ID, accept type and content type.
+    */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
     let headers: [String: String]
     
-    //Init function
     init () {
         
+        //Get the session ID from device local database. See definition of the class 'currSession2' in mobileDataBase.swift file.
         if Realm().objects(currSession2).count != 0 {
             curSession = Realm().objects(currSession2)[0].session_id
         }
@@ -22,10 +27,12 @@ class InfoUserService {
             "Accept": "application/json",
             "Content-type": "application/json"
         ]
-        
     }
     
-    //Public functions
+    /* Public functions.
+    'infoAboutUser()' - the function that gets id and login of user by session ID.
+    'searchUsers()' - the function that gets serach result of users.
+    */
     func infoAboutUser(completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var response: [String: String] = [:]
         
@@ -49,7 +56,11 @@ class InfoUserService {
         return response
     }
     
-    //Private functions. Provides performance of public functions.
+    /* Private functions.
+    'make_request_infoAboutUser()' - the function that directly performs POST request to server for gets information about user. It uses the Alamofire framework.
+    'make_request_searchUsers()' - the function that sends search request to sever and take result of it back.
+    'process_error()' - the function that returns error when the mobile database doesn't have session ID.
+    */
     private func make_request_infoAboutUser(completion_request: (result: [String: String]) -> Void) -> Void {
         
         var result: [String: String] = [:]

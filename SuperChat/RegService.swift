@@ -2,12 +2,17 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+//The service provides methods for registration on server. The registration includes login of user automatically.
 class RegService {
     
-    //Properties
+    /* Class properties.
+    'ServerPath' - it's http path to server.
+    */
     let ServerPath: String = ClientAPI().ServerPath
     
-    //Public functions
+    /* Public functions.
+    'perform()' - the function that takes new login and password, checks them and gives them into request.
+    */
     func perform(login: String, password: String, passwordRepeat: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var regIsAvalible = true
         var response: [String: String] = [:]
@@ -30,7 +35,10 @@ class RegService {
         
     }
     
-    //Private functions. Provides performance of public functions.
+    /* Private functions.
+    'make_request()' - the function that directly performs POST request to server for user registration. It uses the Alamofire framework.
+    'process_error()' - the function that returns error when login or password are empty. It's UI error.
+    */
     private func make_request(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> Void {
         var result: [String: String] = [:]
         

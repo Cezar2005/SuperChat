@@ -1,12 +1,9 @@
 import Foundation
 
+//The service provides utility methods.
 class UtilityClasses {
     
-    func condenseWhitespace(string: String) -> String {
-        let components = string.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).filter({!isEmpty($0)})
-        return join(" ", components)
-    }
-    
+    //The function convers string value in format '{key: value}' to json object. The json object is Dictionary type.
     func convertStringToDictionary(text: String) -> [String:AnyObject]? {
         if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
             var error: NSError?
@@ -19,6 +16,7 @@ class UtilityClasses {
         return nil
     }
     
+    //The function checks the string for invalid characters.
     func containsOnlyLetters(input: String) -> Bool {
         for chr in input {
             if (!(chr >= "a" && chr <= "z") && !(chr >= "A" && chr <= "Z") ) {

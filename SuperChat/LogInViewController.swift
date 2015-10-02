@@ -4,13 +4,23 @@ import SwiftWebSocket
 import SwiftyJSON
 import RealmSwift
 
+//The login ViewController. It allows the user to login.
 class LogInViewController: UIViewController {
     
     @IBOutlet weak var entryLoginField: UITextField!
     @IBOutlet weak var entryPassField: UITextField!
+    
+    /* ViewController properties.
+    'session' - it's entity for current session.
+    'realm' - it's implementation of local data base object.
+    */
     var session = currSession2()
     let realm = Realm()
     
+    /*  'touchesBegan()' - it's override of the default function that hides a keyboard after end editing.
+    'getResultOperation()' - it's function for closure. The function argument 'response' containts the session ID. Available of session ID is successful of authorization. Session will be write into object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
+    'Login()' - it's starts authorization process. It's UI Action (click on the "Log in" button).
+    */
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)
     }
@@ -19,19 +29,17 @@ class LogInViewController: UIViewController {
         
         if response["error"] == nil {
             self.session.session_id = response["session_id"]!
-            //Запишем сессию в локальную БД
             self.realm.write {
                 self.realm.deleteAll()
                 self.realm.add(self.session)
             }
-            //Переходим в экран "Мои чаты"
-            self.performSegueWithIdentifier("LoginToChatList", sender: self)
+            self.performSegueWithIdentifier("LoginToChatList", sender: self) //Successful authorization. Go to Chat list screen.
             
         } else {
             switch response["error"]! {
             case "data_is_empty":
                 println("data_is_empty")
-            case "wrong_credentials":
+            case "wrong_credentials", "user_not_found":
                 entryLoginField.backgroundColor = UIColor.lightGrayColor()
                 entryPassField.backgroundColor = UIColor.lightGrayColor()
             default:
