@@ -8,7 +8,7 @@ class ChatRoomsService {
     
     //Properties
     let ServerPath: String = ClientAPI().ServerPath
-    let curSession: String = Realm().objects(currSession2)[0].session_id
+    var curSession: String = ""
     let headers: [String: String]
     
     struct User {
@@ -32,6 +32,11 @@ class ChatRoomsService {
     
     //Init function
     init () {
+        
+        if Realm().objects(currSession2).count != 0 {
+            curSession = Realm().objects(currSession2)[0].session_id
+        }
+        
         self.headers = [
             "X-Session-Id": "\(curSession)",
             "Accept": "application/json",

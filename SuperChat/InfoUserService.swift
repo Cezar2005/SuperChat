@@ -7,26 +7,33 @@ class InfoUserService {
     
     //Properties
     let ServerPath: String = ClientAPI().ServerPath
-    let curSession: String = Realm().objects(currSession2)[0].session_id
+    var curSession: String = ""
     let headers: [String: String]
     
     //Init function
     init () {
+        
+        if Realm().objects(currSession2).count != 0 {
+            curSession = Realm().objects(currSession2)[0].session_id
+        }
+        
         self.headers = [
             "X-Session-Id": "\(curSession)",
             "Accept": "application/json",
             "Content-type": "application/json"
         ]
+        
     }
     
     //Public functions
-    func infoAboutUser(completion_request: (resilt: [String: String]) -> Void) -> [String: String] {
+    func infoAboutUser(completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var response: [String: String] = [:]
         
         if !curSession.isEmpty {
             make_request_infoAboutUser(completion_request)
         } else {
             response = process_error()
+            completion_request(result: response)
         }
         
         return response

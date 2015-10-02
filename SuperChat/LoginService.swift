@@ -7,16 +7,22 @@ class LoginService {
     
     //Properties
     let ServerPath: String = ClientAPI().ServerPath
-    let curSession: String = Realm().objects(currSession2)[0].session_id
+    var curSession: String = ""
     let headers: [String: String]
     
     //Init function
     init () {
+        
+        if Realm().objects(currSession2).count != 0 {
+            curSession = Realm().objects(currSession2)[0].session_id
+        }
+        
         self.headers = [
             "X-Session-Id": "\(self.curSession)",
             "Accept": "application/json",
             "Content-type": "application/json"
         ]
+
     }
     
     //Public functions
