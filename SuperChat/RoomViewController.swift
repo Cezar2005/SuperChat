@@ -137,17 +137,13 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.textLabel?.text = currMessage.text
             cell.detailTextLabel?.text = "\(currMessage.dateTimeCreated.description)"
             if String(currMessage.userSenderId) == self.currUser["id"] {
-                //Сообщения от меня (т.е. мое), меняем цвет на #5eb964 (rgb(94,185,100)) и делаем выравнивание по правому краю
-                cell.backgroundColor = UIColor(red: 0.094, green: 0.185, blue: 0.100, alpha: 1.0)
-                cell.textLabel!.textColor = UIColor.whiteColor()
-                cell.textLabel!.textAlignment = NSTextAlignment.Right
-                cell.detailTextLabel!.textAlignment = NSTextAlignment.Right
-                cell.contentView.frame = CGRectMake(0, 0, tableView.frame.size.width, 100)
+                //Сообщения от меня (т.е. мое)
+                cell.backgroundColor = UIColor(red: 0.222, green: 0.245, blue: 0.216, alpha: 0.1)
+                cell.textLabel!.textColor = UIColor(red: 0.020, green: 0.057, blue: 0.014, alpha: 1.0)
             } else {
-                //Сообщения не от меня (т.е. мне), меняем цвет на #e5e7eb (rgb(229,231,235)) и делаем выравнивание по левому краю
-                cell.backgroundColor = UIColor(red: 0.229, green: 0.231, blue: 0.235, alpha: 1.0)
-                cell.textLabel?.textAlignment = NSTextAlignment.Justified
-                cell.detailTextLabel?.textAlignment = NSTextAlignment.Justified
+                //Сообщения не от меня (т.е. мне)
+                cell.backgroundColor = UIColor.whiteColor()
+                cell.textLabel!.textColor = UIColor(red: 0.098, green: 0.098, blue: 0.098, alpha: 1.0)
             }
         }
         

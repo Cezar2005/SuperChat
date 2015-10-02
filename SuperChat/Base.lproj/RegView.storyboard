@@ -435,7 +435,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write message..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KzR-LT-jYF">
                                 <rect key="frame" x="8" y="513" width="476" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <action selector="messageTextFieldEditingDidBegin:" destination="xPU-Jd-EEE" eventType="editingDidBegin" id="mQJ-W8-cQ0"/>
@@ -444,7 +444,6 @@
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3Iq-jJ-rfV">
                                 <rect key="frame" x="0.0" y="66" width="600" height="439"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -681,8 +680,8 @@
         <image name="Logo" width="470" height="470"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="dUk-Sx-EEn"/>
         <segue reference="eTh-xi-2uo"/>
-        <segue reference="U4f-P7-siA"/>
         <segue reference="dpv-cW-FxS"/>
     </inferredMetricsTieBreakers>
 </document>

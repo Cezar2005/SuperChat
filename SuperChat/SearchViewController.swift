@@ -33,19 +33,26 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         
-        InfoUserService().searchUsers(searchBar.text, completion_request:
-            {(result: [ChatRoomsService.User]) -> Void in
-                self.searchResult = result
-                if self.searchResult.count == 0 {
-                    let alert = UIAlertView()
-                    alert.title = "User \(searchBar.text) not found"
-                    alert.addButtonWithTitle("OK")
-                    alert.show()
+        let alert = UIAlertView()
+        alert.addButtonWithTitle("OK")
+        
+        if UtilityClasses().containsOnlyLetters(searchBar.text) {
+            InfoUserService().searchUsers(searchBar.text, completion_request:
+                {(result: [ChatRoomsService.User]) -> Void in
+                    self.searchResult = result
+                    if self.searchResult.count == 0 {
+                        alert.title = "User \(searchBar.text) not found"
+                        alert.show()
+                    }
+                    self.tableView.reloadData()
+                    self.view.endEditing(true)
                 }
-                self.tableView.reloadData()
-                self.view.endEditing(true)
-            }
-        )
+            )
+        } else {
+            alert.title = "The search text '\(searchBar.text)' contains invalid characters."
+            alert.show()
+        }
+        
     }
     
     //переопределение функции подготовки к переходу по идентификатору. Передача значения выбранной комнаты в целевой ViewController

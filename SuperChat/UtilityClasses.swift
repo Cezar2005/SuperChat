@@ -19,4 +19,13 @@ class UtilityClasses {
         return nil
     }
     
+    func containsOnlyLetters(input: String) -> Bool {
+        for chr in input {
+            if (!(chr >= "a" && chr <= "z") && !(chr >= "A" && chr <= "Z") ) {
+                return false
+            }
+        }
+        return true
+    }
+    
 }

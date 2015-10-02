@@ -85,11 +85,13 @@ class InfoUserService {
                 } else {
                     var jsonData = JSON(data!)
                     if !jsonData.isEmpty {
-                        for i in 0...jsonData.count-1 {
-                            var user: ChatRoomsService.User = ChatRoomsService.User()
-                            user.id = jsonData[i]["id"].intValue
-                            user.login = jsonData[i]["login"].stringValue
-                            result.append(user)
+                        if jsonData["error"]["code"].stringValue != "unauthorized" {
+                            for i in 0...jsonData.count-1 {
+                                var user: ChatRoomsService.User = ChatRoomsService.User()
+                                user.id = jsonData[i]["id"].intValue
+                                user.login = jsonData[i]["login"].stringValue
+                                result.append(user)
+                            }
                         }
                     } else {
                         println("data_is_empty")
