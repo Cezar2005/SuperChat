@@ -9,8 +9,8 @@ class ChatRoomsService {
     
     /* Class properties.
     'ServerPath' - it's a http path to server.
-    'curSession' - it's a string value of current session ID.
-    'headers' - it's headers for http request that contain session ID, accept type and content type.
+    'curSession' - it's a string value of current an ID of session.
+    'headers' - it's headers for http request that contain an ID of session, accept type and content type.
     
     'User', 'Room', 'Message' - the structures that define properties of entity as User, Room (it contains users and user messages), Message.
     

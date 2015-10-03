@@ -18,7 +18,7 @@ class LogInViewController: UIViewController {
     let realm = Realm()
     
     /*  'touchesBegan()' - it's an override of the default function that hides a keyboard after end editing.
-    'getResultOperation()' - it's a function for closure. The function argument 'response' contains the session ID. If an ID session is available the authorization will be successful. Session will be written into the object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
+    'getResultOperation()' - it's a function for closure. The function argument 'response' contains an ID of session. If an ID of session is available the authorization will be successful. Session will be written into the object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
     'Login()' - it's a start authorization process. It's an UI Action (click on the "Log in" button).
     */
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {

@@ -8,8 +8,8 @@ class InfoUserService {
     
     /* Class properties.
     'ServerPath' - it's a http path to server.
-    'curSession' - it's a string value of current an ID session.
-    'headers' - it's headers for http request that contain session ID, accept type and content type.
+    'curSession' - it's a string value of current an ID of session.
+    'headers' - it's headers for http request that contain an ID of session, accept type and content type.
     */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
@@ -17,7 +17,7 @@ class InfoUserService {
     
     init () {
         
-        //Getting the ID session from local database of the device. See the definition of the class 'currSession2' in mobileDataBase.swift file.
+        //Getting the ID of session from local database of the device. See the definition of the class 'currSession2' in mobileDataBase.swift file.
         if Realm().objects(currSession2).count != 0 {
             curSession = Realm().objects(currSession2)[0].session_id
         }
@@ -30,7 +30,7 @@ class InfoUserService {
     }
     
     /* Public functions.
-    'infoAboutUser()' - the function that gets id and login of user by ID session.
+    'infoAboutUser()' - the function that gets id and login of user by ID of session.
     'searchUsers()' - the function that gets search result of users.
     */
     func infoAboutUser(completion_request: (result: [String: String]) -> Void) -> [String: String] {

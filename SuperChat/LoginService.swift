@@ -8,8 +8,8 @@ class LoginService {
     
     /* Class properties.
         'ServerPath' - it's a http path to server.
-        'curSession' - it's a string value of current session ID.
-        'headers' - it's headers for http request that contain session ID, accept type and content type.
+        'curSession' - it's a string value of current an ID of session.
+        'headers' - it's headers for http request that contain an ID of session, accept type and content type.
     */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""

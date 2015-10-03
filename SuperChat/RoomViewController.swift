@@ -20,7 +20,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     'currUser' - dictionary contains an information about current user.
     'ServerPath' - it's a path to the server of the mobile app from ClientAPI class.
     'SocketPath' - it's a path to the web socket server from ClientAPI class.
-    'curSession' - it's a current user`s session ID from mobile data base of the device.
+    'curSession' - it's a current user`s an ID of session from mobile data base of the device.
     'ws' - it's a value for a web socket entity.
     */
     var messagesArray: [ChatRoomsService.Message] = []
