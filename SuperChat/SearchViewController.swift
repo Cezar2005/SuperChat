@@ -3,8 +3,13 @@ import Alamofire
 import SwiftWebSocket
 import SwiftyJSON
 
+//The viewController allows to find a user by login. The result of search is the user list (It's a chat room with these users).
 class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate, UIAlertViewDelegate {
     
+    /* ViewController properties.
+    'searchResult' - it's a dictionary that contains users.
+    'selectedRoom' - it's an implementation of chat room that was selected in the list.
+    */
     var searchResult: [ChatRoomsService.User] = []
     var selectedRoom = ChatRoomsService.Room()
     
@@ -17,9 +22,13 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
         
         tableView.delegate = self
         searchBar.delegate = self
-        
     }
     
+    /*  'searchBarTextDidBeginEditing()' - function shows a cancel button after the editing of search field was started.
+        'searchBarCancelButtonClicked()' - function clears search result and reloads table view on screen.
+        'searchBarSearchButtonClicked()' - function performs search. If the search result is empty the function shows alert with the text "User not found".
+        'prepareForSegue()' - function sends the selected room to the viewController class.
+    */
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         self.searchBar.showsCancelButton = true
     }
@@ -55,7 +64,6 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
         
     }
     
-    //переопределение функции подготовки к переходу по идентификатору. Передача значения выбранной комнаты в целевой ViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "SearchToRoom" {
             let roomVC = segue.destinationViewController as! RoomViewController
@@ -63,13 +71,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
         }
     }
     
-    //Обработка выбора строки tableView
+    //The function processes the selection table row. It sends a request for creating a chat room with selected user.
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
-        // Create the alert controller
         var alertController = UIAlertController(title: "Create chat with '\(searchResult[indexPath.row].login)'?", message: "", preferredStyle: .Alert)
         
-        // Create the actions
         var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
             UIAlertAction in
             var usersForRoom: [ChatRoomsService.User] = []
@@ -86,21 +92,19 @@ class SearchViewController: UIViewController, UITableViewDelegate, UISearchBarDe
             tableView.cellForRowAtIndexPath(indexPath)?.selected = false
         }
         
-        // Add the actions
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
         
-        // Present the controller
         self.presentViewController(alertController, animated: true, completion: nil)
         
     }
     
-    //Функция возвращает количество строк, которое надо выводить в таблице
+    //The function returns a number of rows in the tableView that will be displayed on screen.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResult.count
     }
     
-    //Функция возвращает ячейку таблицы для вывода.
+    //The function returns the cell of tableView.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "SearchUserCell")

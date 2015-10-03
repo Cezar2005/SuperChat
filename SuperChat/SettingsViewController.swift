@@ -3,10 +3,10 @@ import Alamofire
 import SwiftyJSON
 import RealmSwift
 
+//The viewController allows to logout for a current user.
 class SettingsViewController: UIViewController {
     
     @IBOutlet weak var LoginLabel: UILabel!
-    //let realm = Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,20 +22,12 @@ class SettingsViewController: UIViewController {
         
     }
     
+    //The function runs logout of a current user. An application will change a screen to a login screen after logout.
     @IBAction func Logout() {
-        //Выполнение логаута
         LoginService().logout({(result: Bool) -> Void in
             if result {
-                /*
-                self.realm.write {
-                    self.realm.deleteAll()
-                }
-                */
                 self.performSegueWithIdentifier("SettingsToLogin", sender: self)
             }
         })
     }
-    
-    
 }
-

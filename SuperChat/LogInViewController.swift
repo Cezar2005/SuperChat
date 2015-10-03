@@ -11,15 +11,15 @@ class LogInViewController: UIViewController {
     @IBOutlet weak var entryPassField: UITextField!
     
     /* ViewController properties.
-    'session' - it's entity for current session.
-    'realm' - it's implementation of local data base object.
+    'session' - it's an entity for current session.
+    'realm' - it's an implementation of local data base object.
     */
     var session = currSession2()
     let realm = Realm()
     
-    /*  'touchesBegan()' - it's override of the default function that hides a keyboard after end editing.
-    'getResultOperation()' - it's function for closure. The function argument 'response' containts the session ID. Available of session ID is successful of authorization. Session will be write into object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
-    'Login()' - it's starts authorization process. It's UI Action (click on the "Log in" button).
+    /*  'touchesBegan()' - it's an override of the default function that hides a keyboard after end editing.
+    'getResultOperation()' - it's a function for closure. The function argument 'response' contains the session ID. If an ID session is available the authorization will be successful. Session will be written into the object of mobile data base and then app will go to user chat list ViewController (MyChatViewController).
+    'Login()' - it's a start authorization process. It's an UI Action (click on the "Log in" button).
     */
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true)

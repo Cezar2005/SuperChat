@@ -4,6 +4,7 @@ import RealmSwift
 import SwiftyJSON
 import Starscream
 
+//The viewController of a chat room. It allows to send a message to the interlocutor and see the correspondence history.
 class RoomViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var messageTableView: UITableView!
@@ -12,7 +13,16 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var messageTextBottom: NSLayoutConstraint!
     @IBOutlet weak var NavBarItem: UINavigationItem!
     @IBOutlet weak var backButton: UIBarButtonItem!
-
+    
+    /* ViewController properties.
+    'messagesArray' - it's an array that contains messages from the correspondence history.
+    'currentRoom' - it's an implementation of a current room object. It was got from MyChatViewController.
+    'currUser' - dictionary contains an information about current user.
+    'ServerPath' - it's a path to the server of the mobile app from ClientAPI class.
+    'SocketPath' - it's a path to the web socket server from ClientAPI class.
+    'curSession' - it's a current user`s session ID from mobile data base of the device.
+    'ws' - it's a value for a web socket entity.
+    */
     var messagesArray: [ChatRoomsService.Message] = []
     var currentRoom = ChatRoomsService.Room()
     var currUser:[String: String] = [:]
@@ -33,12 +43,10 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWasShown:"), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWasHide:"), name:UIKeyboardWillHideNotification, object: nil);
         
-        
-        
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tableViewTapped")
         self.messageTableView.addGestureRecognizer(tapGesture)
         
-        //Получить историю сообщений
+        //The function gets the correspondence history between the current user and his interlocutor.
         ChatRoomsService().historyRoom(self.currentRoom.id, completion_request: {
             (result: [ChatRoomsService.Message]) -> Void in
             self.messagesArray = result
@@ -46,10 +54,9 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.positioningOnLastMessage(false)
         })
         
-        //Получение информаци о текущем пользователе.
+        //The function gets the information about current user. And then we find the login of the user`s interlocutor. It is used for a screen title.
         InfoUserService().infoAboutUser( {(result: [String: String]) -> Void in
             self.currUser = result
-            //Узнаем, кто наш собеседник
             for user in self.currentRoom.users {
                 if String(user.id) != self.currUser["id"] {
                     self.backButton.title! = "← Chat with \(user.login)"
@@ -57,12 +64,12 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         })
         
-        //Если поле ввода пустое, то кнопка отпраки не активна
+        //The send button is disable when message text filed is empty.
         if self.messageTextField.text.isEmpty {
             self.sendButton.enabled = false
         }
         
-        //Инициализируем WebSocket
+        //Initialization of the web socket.
         initWebSocket()
     
     }
@@ -116,7 +123,7 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.messageTextBottom.constant = 8
             
         UIView.animateWithDuration(0.4, animations: { () -> Void in
-            self.messageTextBottom.constant = self.messageTextBottom.constant + keyboardFrame.size.height //БАГ! Поправить! При смене языка клавиатура ползет вверх! )
+            self.messageTextBottom.constant = self.messageTextBottom.constant + keyboardFrame.size.height
         })
         
     }
@@ -140,11 +147,11 @@ class RoomViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.textLabel?.text = currMessage.text
             cell.detailTextLabel?.text = "\(currMessage.dateTimeCreated.description)"
             if String(currMessage.userSenderId) == self.currUser["id"] {
-                //Сообщения от меня (т.е. мое)
+                //Messages to me.
                 cell.backgroundColor = UIColor(red: 0.222, green: 0.245, blue: 0.216, alpha: 0.1)
                 cell.textLabel!.textColor = UIColor(red: 0.020, green: 0.057, blue: 0.014, alpha: 1.0)
             } else {
-                //Сообщения не от меня (т.е. мне)
+                //Messages from me.
                 cell.backgroundColor = UIColor.whiteColor()
                 cell.textLabel!.textColor = UIColor(red: 0.098, green: 0.098, blue: 0.098, alpha: 1.0)
             }

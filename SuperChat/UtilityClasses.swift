@@ -3,7 +3,7 @@ import Foundation
 //The service provides utility methods.
 class UtilityClasses {
     
-    //The function convers string value in format '{key: value}' to json object. The json object is Dictionary type.
+    //The function convers a string value in format '{key: value}' to json object. The json object is a Dictionary type.
     func convertStringToDictionary(text: String) -> [String:AnyObject]? {
         if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
             var error: NSError?

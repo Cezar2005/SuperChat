@@ -7,9 +7,9 @@ import RealmSwift
 class LoginService {
     
     /* Class properties.
-        'ServerPath' - it's http path to server.
-        'curSession' - it's string value of current session ID.
-        'headers' - it's headers for http request that containts session ID, accept type and content type.
+        'ServerPath' - it's a http path to server.
+        'curSession' - it's a string value of current session ID.
+        'headers' - it's headers for http request that contain session ID, accept type and content type.
     */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
@@ -29,8 +29,8 @@ class LoginService {
     }
     
     /* Public functions.
-        'perform()' - the function that takes login and password, checks them and gives them into request.
-        'logout()' - the function that does logut user.
+        'perform()' - the function that takes login and password, checks them and sends them into request.
+        'logout()' - the function that makes logout of the user.
     */
     func perform(login: String, password: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var loginIsAvalible = true

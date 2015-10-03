@@ -8,13 +8,13 @@ import SwiftWebSocket
 class ChatRoomsService {
     
     /* Class properties.
-    'ServerPath' - it's http path to server.
-    'curSession' - it's string value of current session ID.
-    'headers' - it's headers for http request that containts session ID, accept type and content type.
+    'ServerPath' - it's a http path to server.
+    'curSession' - it's a string value of current session ID.
+    'headers' - it's headers for http request that contain session ID, accept type and content type.
     
-    'User', 'Room', 'Message' - the structures that define properties of entity as User, Room (it containts the users and user messages), Message.
+    'User', 'Room', 'Message' - the structures that define properties of entity as User, Room (it contains users and user messages), Message.
     
-    'formatter' - it's formatter for time of message.
+    'formatter' - it's a formatter for time of message.
     */
     let ServerPath: String = ClientAPI().ServerPath
     var curSession: String = ""
@@ -61,7 +61,7 @@ class ChatRoomsService {
     /* Public functions.
     'availableRooms()' - the function that gets available chat rooms for current user.
     'createRoom()' - the function that creates a new chat room with any user.
-    'historyRoom()' - the function that get a messages history in current chat room.
+    'historyRoom()' - the function that gets a messages history in current chat room.
     */
     func availableRooms(completion_request: (result: [Room]) -> Void) -> [Room] {
         
@@ -96,7 +96,7 @@ class ChatRoomsService {
     'make_request_availableRooms()'
     'make_request_createRoom()'
     'make_request_historyRoom()'
-    These functions directly perform GET or POST requests to server. It use the Alamofire framework.
+    These functions directly perform GET or POST requests to server. It uses the Alamofire framework.
     */
     private func make_request_availableRooms(completion_request: (result: [Room]) -> Void) -> Void {
         

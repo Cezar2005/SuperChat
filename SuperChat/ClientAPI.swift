@@ -1,6 +1,6 @@
 import Foundation
 
-//The service provides path to server. The path can be local or external.
+//The service provides a path to server. The path can be local or external.
 class ClientAPI {
     
     var local = true                //Change that for using local or external server.

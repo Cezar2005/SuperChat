@@ -8,10 +8,10 @@ import RealmSwift
 class MyChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     /* ViewController properties.
-    'currUser' - it's dictionary for current session.
-    'availableUserRooms' - it's dictionary for list of available user room for current user.
-    'selectedRoom' - it's implementation of chat room object in list, that was selected by user.
-    'tavleView' - it's UI TableView. It contains the list of chat rooms.
+    'currUser' - it's a dictionary for a current session.
+    'availableUserRooms' - it's a dictionary for the list of available user room for a current user.
+    'selectedRoom' - it's an implementation of chat room object in the list that was selected by the user.
+    'tavleView' - it's an UI TableView. It contains the list of chat rooms.
     */
     var currUser:[String: String] = [:]
     var availableUserRooms: [ChatRoomsService.Room] = []
@@ -33,7 +33,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         })
     }
     
-    //The function sends entity of selected chat room from list into segue between screen.
+    //The function sends the entity of selected chat room from the list into the segue between screens.
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "MyChatToRoom" {
             let roomVC = segue.destinationViewController as! RoomViewController
@@ -41,7 +41,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    //This is line treatment of choice in tavleView.
+    //This is a line treatment of choice in tavleView.
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if !self.availableUserRooms.isEmpty {
             self.selectedRoom = self.availableUserRooms[indexPath.row]
@@ -49,7 +49,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    //The function returns number of rows in tableView that will be displayed on screen.
+    //The function returns a number of rows in tableView that will be displayed on the screen.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if !self.availableUserRooms.isEmpty {
@@ -60,7 +60,7 @@ class MyChatViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
-    //The function returns the cell of tableView. The cells content login of the users.
+    //The function returns the cell of tableView. The cells contain the login of the users.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "MyTestSwiftCell")

@@ -6,12 +6,12 @@ import SwiftyJSON
 class RegService {
     
     /* Class properties.
-    'ServerPath' - it's http path to server.
+    'ServerPath' - it's a http path to server.
     */
     let ServerPath: String = ClientAPI().ServerPath
     
     /* Public functions.
-    'perform()' - the function that takes new login and password, checks them and gives them into request.
+    'perform()' - the function that takes new login and password, checks them and sends them into request.
     */
     func perform(login: String, password: String, passwordRepeat: String, completion_request: (result: [String: String]) -> Void) -> [String: String] {
         var regIsAvalible = true
